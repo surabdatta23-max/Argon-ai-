@@ -1,4 +1,3 @@
-html
 <!DOCTYPE html>
 <html lang="bn" class="dark">
 <head>
@@ -110,4 +109,2550 @@ html
         ::-webkit-scrollbar-track {
             background: rgba(6, 9, 20, 0.5);
         }
-        ::-webkit-scrollba
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.4);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(6, 182, 212, 0.8);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-slate-100 antialiased selection:bg-cyan-500 selection:text-black">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-cyan-500/15 px-3 sm:px-6 py-2.5 flex items-center justify-between">
+        <!-- Logo & Active Persona Branding -->
+        <div class="flex items-center space-x-3">
+            <div class="relative flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-pink-500 p-0.5 shadow-lg shadow-cyan-500/25">
+                <div class="w-full h-full bg-slate-950 rounded-2xl flex items-center justify-center">
+                    <i class="fa-solid fa-atom text-cyan-400 text-lg animate-spin" style="animation-duration: 15s;"></i>
+                </div>
+                <span id="navStatusDot" class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-400 border-2 border-slate-950 rounded-full animate-pulse"></span>
+            </div>
+            <div>
+                <div class="flex items-center space-x-2">
+                    <span class="font-extrabold text-base tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-indigo-300 to-pink-400">ARGON AI</span>
+                    <span id="activePersonaBadge" class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-pink-500/20 text-pink-300 border border-pink-500/30">
+                        PUJA
+                    </span>
+                </div>
+                <p class="text-[11px] text-slate-400">
+                    সম্বোধন: <span id="activeHonorificText" class="text-pink-400 font-semibold">প্রাণনাথ</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Middle Persona Switcher (Desktop) -->
+        <div class="hidden md:flex items-center bg-slate-950/80 p-1 rounded-2xl border border-white/10 text-xs shadow-inner">
+            <button onclick="switchPersona('puja')" id="pNavBtn-puja" class="px-3.5 py-1.5 rounded-xl font-semibold flex items-center gap-1.5 transition bg-pink-600 text-white shadow-md shadow-pink-600/30">
+                <i class="fa-solid fa-heart text-[10px]"></i> Puja (পূজা)
+            </button>
+            <button onclick="switchPersona('nabila')" id="pNavBtn-nabila" class="px-3.5 py-1.5 rounded-xl font-semibold flex items-center gap-1.5 transition text-slate-300 hover:text-white">
+                <i class="fa-solid fa-sparkles text-[10px]"></i> Nabila (নাবিলা)
+            </button>
+            <button onclick="switchPersona('sam')" id="pNavBtn-sam" class="px-3.5 py-1.5 rounded-xl font-semibold flex items-center gap-1.5 transition text-slate-300 hover:text-white">
+                <i class="fa-solid fa-shield-halved text-[10px]"></i> Sam (স্যাম)
+            </button>
+        </div>
+
+        <!-- Right Quick Controls -->
+        <div class="flex items-center space-x-2">
+            <!-- Wake Word Switch Button -->
+            <button id="wakeToggleBtn" onclick="toggleWakeWordListener()" title="Toggle Wake Word Continuous Listener" class="px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 border transition bg-emerald-950/40 text-emerald-300 border-emerald-500/40 hover:bg-emerald-900/50 shadow-sm">
+                <span id="wakePingDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span id="wakeStatusLabel">Wake Word: ON</span>
+            </button>
+
+            <!-- Stop Assistant Speech Button -->
+            <button onclick="stopAssistantSpeech()" title="Stop Speaking (Interrupt)" class="p-2 rounded-xl bg-slate-900 hover:bg-rose-950/80 border border-white/10 hover:border-rose-500/40 text-rose-300 transition active:scale-95">
+                <i class="fa-solid fa-stop text-sm"></i>
+            </button>
+
+            <!-- Screen Keep-Awake WakeLock Toggle -->
+            <button id="wakeLockBtn" onclick="toggleScreenWakeLock()" title="Keep Screen Awake (Prevents Mobile Sleep)" class="p-2 rounded-xl bg-slate-900 hover:bg-cyan-950/70 border border-white/10 text-cyan-400 transition text-xs">
+                <i class="fa-solid fa-lightbulb"></i>
+            </button>
+
+            <!-- Mobile Info info modal trigger -->
+            <button onclick="openTab('settings')" title="Settings & Architecture" class="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-white/10 text-slate-300 transition">
+                <i class="fa-solid fa-sliders text-sm"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Persona Bar -->
+    <div class="flex md:hidden items-center justify-around bg-slate-950/90 border-b border-white/5 py-1.5 px-2 text-xs">
+        <button onclick="switchPersona('puja')" id="mNavBtn-puja" class="px-3 py-1 rounded-lg text-pink-400 font-bold border-b-2 border-pink-500">
+            🌸 Puja (প্রাণনাথ)
+        </button>
+        <button onclick="switchPersona('nabila')" id="mNavBtn-nabila" class="px-3 py-1 rounded-lg text-slate-400 font-medium">
+            ✨ Nabila (Honey)
+        </button>
+        <button onclick="switchPersona('sam')" id="mNavBtn-sam" class="px-3 py-1 rounded-lg text-slate-400 font-medium">
+            ⚡ Sam (Sir)
+        </button>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 flex flex-col space-y-4">
+
+        <!-- Navigation Tabs Bar -->
+        <div class="flex items-center justify-between border-b border-white/10 pb-2 overflow-x-auto text-xs sm:text-sm font-medium gap-2">
+            <div class="flex items-center space-x-1 sm:space-x-2">
+                <button onclick="openTab('orb')" id="tabBtn-orb" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 text-white flex items-center gap-2 shadow-lg shadow-cyan-600/20">
+                    <i class="fa-solid fa-atom"></i> <span>Assistant Orb</span>
+                </button>
+                <button onclick="openTab('chat')" id="tabBtn-chat" class="px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-900/60 flex items-center gap-2 transition">
+                    <i class="fa-solid fa-comments"></i> <span>AI Brain Chat</span>
+                </button>
+                <button onclick="openTab('studio')" id="tabBtn-studio" class="px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-900/60 flex items-center gap-2 transition">
+                    <i class="fa-solid fa-microphone-lines text-pink-400"></i> <span>Voice Studio</span>
+                </button>
+                <button onclick="openTab('reminders')" id="tabBtn-reminders" class="px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-900/60 flex items-center gap-2 transition">
+                    <i class="fa-solid fa-bell"></i> <span>Life & Routine</span>
+                    <span id="remindersCountBadge" class="bg-indigo-500/40 text-cyan-300 text-[10px] px-1.5 py-0.2 rounded-full font-bold">0</span>
+                </button>
+                <button onclick="openTab('whatsapp')" id="tabBtn-whatsapp" class="px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-900/60 flex items-center gap-2 transition">
+                    <i class="fa-brands fa-whatsapp text-emerald-400"></i> <span>WhatsApp Hub</span>
+                </button>
+                <button onclick="openTab('settings')" id="tabBtn-settings" class="px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-900/60 flex items-center gap-2 transition">
+                    <i class="fa-solid fa-gear"></i> <span>Settings & Memory</span>
+                </button>
+            </div>
+
+            <!-- Live Clock & WakeLock Status -->
+            <div class="hidden lg:flex items-center space-x-2 text-xs font-mono text-slate-400">
+                <span id="screenLockStatus" class="bg-slate-950/70 border border-white/5 px-2 py-1 rounded-xl text-[10px] text-cyan-300 flex items-center gap-1">
+                    <i class="fa-solid fa-shield"></i> WakeLock: Standby
+                </span>
+                <span class="bg-slate-950/70 border border-white/5 px-2.5 py-1 rounded-xl flex items-center gap-1.5 text-cyan-400">
+                    <i class="fa-regular fa-clock"></i> <span id="liveClock">--:--:--</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- Android Background Wake Limitation Advisory Notice -->
+        <div id="mobileLimitationBanner" class="p-3.5 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 text-indigo-200 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+            <div class="flex items-center space-x-2.5">
+                <i class="fa-solid fa-circle-info text-cyan-400 text-base shrink-0"></i>
+                <p>
+                    <strong>মোবাইল ব্রাউজার নিয়মাবলি:</strong> অ্যান্ড্রয়েড ক্রোম বা সাফারি স্ক্রিন অফ হলে বা অন্য ট্যাবে গেলে ব্যাকগ্রাউন্ড মাইক সাময়িক পজ করে। নিখুঁত ব্যবহারের জন্য স্ক্রিন অন রাখুন (Screen WakeLock স্বয়ংক্রিয়ভাবে অ্যাক্টিভ করা হয়েছে)।
+                </p>
+            </div>
+            <button onclick="dismissMobileBanner()" class="text-[11px] px-2.5 py-1 bg-indigo-900/60 hover:bg-indigo-800 text-white rounded-lg shrink-0">
+                বুঝেছি
+            </button>
+        </div>
+
+        <!-- TAB 1: CENTRAL ASSISTANT ORB & DASHBOARD -->
+        <div id="tabContent-orb" class="grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1">
+            <!-- Left 5 cols: Holographic Assistant Orb with 6 States -->
+            <div class="lg:col-span-5 flex flex-col space-y-4">
+                <div id="orbContainerCard" class="glass-panel glass-glow-pink rounded-3xl p-6 flex flex-col items-center relative overflow-hidden transition-all duration-500 min-h-[460px]">
+                    <!-- Ambient Glow Blobs -->
+                    <div id="ambientGlow1" class="absolute -top-20 -left-20 w-52 h-52 bg-pink-600/25 rounded-full blur-3xl pointer-events-none transition-all duration-700"></div>
+                    <div id="ambientGlow2" class="absolute -bottom-20 -right-20 w-52 h-52 bg-cyan-600/25 rounded-full blur-3xl pointer-events-none transition-all duration-700"></div>
+
+                    <!-- Header inside Orb Card -->
+                    <div class="w-full flex items-center justify-between text-xs mb-3 z-10">
+                        <span id="orbPersonaBadge" class="font-bold tracking-wide flex items-center gap-1.5 text-pink-300 bg-pink-950/60 px-3 py-1 rounded-full border border-pink-500/30">
+                            <i class="fa-solid fa-heart"></i> PUJA (পূজা)
+                        </span>
+                        <!-- 6-State Diagnostic Tag -->
+                        <span id="orbStateIndicator" class="font-mono text-[11px] px-2.5 py-0.5 rounded-full border flex items-center gap-1.5 bg-emerald-950/60 border-emerald-500/40 text-emerald-300">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                            <span id="orbStateLabel">IDLE</span>
+                        </span>
+                    </div>
+
+                    <!-- HOLOGRAPHIC ORB (6 ANIMATED STATES) -->
+                    <div class="relative w-64 h-64 flex items-center justify-center my-auto cursor-pointer group" onclick="handleOrbClick()" title="ক্লিক করে সরাসরি কথা বলুন বা ওয়েক-ওয়ার্ড দিন">
+                        <!-- State 2: Expanding Radar Wave Rings (LISTENING) -->
+                        <div id="radarRing1" class="absolute inset-0 rounded-full border border-cyan-400/40 animate-radar-ring pointer-events-none hidden"></div>
+                        <div id="radarRing2" class="absolute inset-0 rounded-full border border-emerald-400/30 animate-radar-ring pointer-events-none hidden" style="animation-delay: 0.6s;"></div>
+
+                        <!-- Outer Gyro Rings -->
+                        <div id="outerGyroRing" class="absolute inset-2 rounded-full border border-pink-500/30 animate-spin" style="animation-duration: 22s;"></div>
+                        <div id="innerGyroRing" class="absolute w-52 h-52 rounded-full border border-cyan-400/25 border-dashed animate-spin" style="animation-duration: 16s; animation-direction: reverse;"></div>
+
+                        <!-- Central Sphere -->
+                        <div id="coreOrbSphere" class="w-36 h-36 rounded-full bg-gradient-to-tr from-pink-600 via-purple-600 to-indigo-600 p-1 shadow-2xl shadow-pink-600/50 animate-orb-idle flex items-center justify-center transition-all duration-300 relative z-10">
+                            <div class="w-full h-full rounded-full bg-slate-950/75 backdrop-blur-md flex flex-col items-center justify-center text-center p-2 relative overflow-hidden">
+                                <div id="orbInnerAura" class="absolute inset-0 bg-pink-500/15 rounded-full transition-all"></div>
+                                <i id="orbCenterIcon" class="fa-solid fa-microphone text-2xl text-pink-300 mb-1 transition-transform group-hover:scale-110"></i>
+                                <span id="orbMainHeading" class="text-xs font-black uppercase tracking-widest text-white">IDLE</span>
+                                <span id="orbSubCaption" class="text-[9px] text-pink-300/80">ডাকুন: "পূজা" / "Puja"</span>
+                            </div>
+                        </div>
+
+                        <!-- Burst Badge for WAKE DETECTED -->
+                        <div id="wakeBurstBadge" class="absolute -top-3 z-20 px-3 py-1 rounded-full bg-gradient-to-r from-pink-500 to-cyan-500 text-white font-extrabold text-xs shadow-xl hidden animate-wake-burst">
+                            ✨ WAKE DETECTED: <span id="wakeDetectedName">PUJA</span>
+                        </div>
+                    </div>
+
+                    <!-- Audio Visualizer Wave Bars (Synched with Listening & Speaking) -->
+                    <div id="audioWaveVisualizer" class="flex items-end justify-center gap-1.5 h-8 w-full px-8 my-2 z-10">
+                        <span class="wave-bar w-1.5 bg-pink-500/50 rounded-full h-2 transition-all duration-75"></span>
+                        <span class="wave-bar w-1.5 bg-purple-400/70 rounded-full h-3 transition-all duration-75"></span>
+                        <span class="wave-bar w-1.5 bg-cyan-400 rounded-full h-4 transition-all duration-75"></span>
+                        <span class="wave-bar w-1.5 bg-pink-400 rounded-full h-6 transition-all duration-75"></span>
+                        <span class="wave-bar w-1.5 bg-indigo-400 rounded-full h-5 transition-all duration-75"></span>
+                        <span class="wave-bar w-1.5 bg-cyan-400/80 rounded-full h-3 transition-all duration-75"></span>
+                        <span class="wave-bar w-1.5 bg-pink-500/50 rounded-full h-2 transition-all duration-75"></span>
+                    </div>
+
+                    <!-- Live Heard Transcript -->
+                    <div class="w-full text-center mt-2 px-2 z-10">
+                        <p id="liveTranscriptDisplay" class="text-xs italic text-slate-300 min-h-[1.75rem] bg-slate-950/60 py-1.5 px-3 rounded-xl border border-white/5 line-clamp-2">
+                            বলুন <span class="text-pink-400 font-semibold">"পূজা"</span>, <span class="text-cyan-400 font-semibold">"নাবিলা"</span>, বা <span class="text-indigo-400 font-semibold">"স্যাম"</span>...
+                        </p>
+                    </div>
+
+                    <!-- Mic Action Buttons -->
+                    <div class="grid grid-cols-2 gap-2.5 w-full mt-4 pt-3 border-t border-white/10 z-10">
+                        <button id="orbPushToTalkBtn" onclick="togglePushToTalkMode()" class="py-2.5 px-3 rounded-2xl bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow-lg shadow-pink-600/30 active:scale-95 transition">
+                            <i id="orbPushIcon" class="fa-solid fa-microphone"></i>
+                            <span id="orbPushLabel">Push to Talk</span>
+                        </button>
+                        <button onclick="previewActiveGreeting()" class="py-2.5 px-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-white/10 text-xs font-semibold flex items-center justify-center gap-1.5 active:scale-95 transition">
+                            <i class="fa-solid fa-volume-high text-pink-400"></i>
+                            <span>ভয়েস টেস্ট</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error Diagnostic Help Banner (Reveals when Mic or Voice fails) -->
+                <div id="orbErrorDiagnosticBox" class="hidden p-3.5 rounded-2xl bg-rose-950/60 border border-rose-500/50 text-rose-200 text-xs space-y-1.5">
+                    <div class="flex items-center gap-2 font-bold">
+                        <i class="fa-solid fa-circle-exclamation text-rose-400 text-base"></i>
+                        <span id="errorDiagTitle">মাইক্রোফোন ত্রুটি</span>
+                    </div>
+                    <p id="errorDiagMessage" class="text-[11px] text-rose-300/90 leading-relaxed">
+                        ব্রাউজারে মাইক্রোফোন পারমিশন ব্লক করা আছে। অনুগ্রহ করে অ্যাড্রেস বারের লক আইকনে ক্লিক করে মাইক্রোফোন Allow করুন।
+                    </p>
+                    <button onclick="retryMicrophoneAccess()" class="text-[10px] px-3 py-1 bg-rose-800 hover:bg-rose-700 text-white font-semibold rounded-lg mt-1">
+                        অনুমতি আবার চেক করুন
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right 7 cols: Quick Command Prompts & Live Activity Feed -->
+            <div class="lg:col-span-7 flex flex-col space-y-4">
+                <!-- Bengali Quick Prompts Bar -->
+                <div class="glass-panel rounded-3xl p-5 space-y-3">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-2.5">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-bolt text-amber-400"></i>
+                            <span>বাংলা ও বাংলিশ কমান্ড প্রিভিউ (৩টি সহকারী)</span>
+                        </h3>
+                        <span class="text-[10px] text-cyan-300 font-mono">1-Tap Execute</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        <button onclick="sendQuickPrompt('Puja, amar kal sokale 7 tay alarm dao')" class="text-left p-3 rounded-2xl bg-slate-900/70 hover:bg-pink-950/40 border border-white/5 hover:border-pink-500/30 transition flex flex-col justify-between group">
+                            <div class="flex items-center justify-between w-full mb-1">
+                                <span class="font-semibold text-pink-300 group-hover:text-pink-200">🌸 Puja: অ্যালার্ম</span>
+                                <span class="text-[9px] bg-pink-500/20 text-pink-300 px-1.5 py-0.5 rounded">প্রাণনাথ</span>
+                            </div>
+                            <p class="text-slate-400 text-[11px]">"কাল সকালে ৭ টায় অ্যালার্ম দাও"</p>
+                        </button>
+
+                        <button onclick="sendQuickPrompt('Nabila, amake proti 2 ghontay jol khete mone koriye dao')" class="text-left p-3 rounded-2xl bg-slate-900/70 hover:bg-cyan-950/40 border border-white/5 hover:border-cyan-500/30 transition flex flex-col justify-between group">
+                            <div class="flex items-center justify-between w-full mb-1">
+                                <span class="font-semibold text-cyan-300 group-hover:text-cyan-200">✨ Nabila: জল রুটিন</span>
+                                <span class="text-[9px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded">Honey</span>
+                            </div>
+                            <p class="text-slate-400 text-[11px]">"আমাকে প্রতি ২ ঘণ্টায় জল খেতে মনে করিয়ে দাও"</p>
+                        </button>
+
+                        <button onclick="sendQuickPrompt('Sam, ei math ta solve kore dao: 3x + 15 = 45')" class="text-left p-3 rounded-2xl bg-slate-900/70 hover:bg-indigo-950/40 border border-white/5 hover:border-indigo-500/30 transition flex flex-col justify-between group">
+                            <div class="flex items-center justify-between w-full mb-1">
+                                <span class="font-semibold text-indigo-300 group-hover:text-indigo-200">⚡ Sam: গণিত সমাধান</span>
+                                <span class="text-[9px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.5 rounded">Sir</span>
+                            </div>
+                            <p class="text-slate-400 text-[11px]">"Sam, solve math: 3x + 15 = 45"</p>
+                        </button>
+
+                        <button onclick="sendQuickPrompt('Puja, WhatsApp open koro')" class="text-left p-3 rounded-2xl bg-slate-900/70 hover:bg-emerald-950/40 border border-white/5 hover:border-emerald-500/30 transition flex flex-col justify-between group">
+                            <div class="flex items-center justify-between w-full mb-1">
+                                <span class="font-semibold text-emerald-300 group-hover:text-emerald-200">💬 Communication Hub</span>
+                                <span class="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded">Direct Action</span>
+                            </div>
+                            <p class="text-slate-400 text-[11px]">"Puja, WhatsApp open koro"</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Assistant Output & Mini Log -->
+                <div class="glass-panel rounded-3xl p-5 flex-1 flex flex-col space-y-3">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-2">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-comment-dots text-cyan-400"></i>
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-white">সর্বশেষ কথোপকথন প্রিভিউ</h3>
+                        </div>
+                        <button onclick="openTab('chat')" class="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1 font-semibold">
+                            সম্পূর্ণ চ্যাট দেখুন <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+
+                    <!-- Mini Live Conversation Box -->
+                    <div id="miniChatContainer" class="flex-1 overflow-y-auto space-y-2.5 max-h-[220px] p-2 bg-slate-950/50 rounded-2xl border border-white/5 text-xs">
+                        <!-- Populated by messages -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: INTERACTIVE AI CHAT & PROBLEM SOLVING -->
+        <div id="tabContent-chat" class="hidden grid grid-cols-1 gap-4 flex-1">
+            <div class="glass-panel rounded-3xl overflow-hidden flex flex-col h-[700px] border border-white/10 shadow-2xl">
+                <!-- Chat Header -->
+                <div class="px-5 py-3.5 bg-slate-950/80 border-b border-white/10 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div id="chatAvatarBox" class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center text-white shadow-md">
+                            <i id="chatAvatarIcon" class="fa-solid fa-heart"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <h2 id="chatAssistantHeading" class="text-sm font-bold text-white">PUJA AI</h2>
+                                <span id="chatLanguageTonePill" class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-pink-500/20 text-pink-300 border border-pink-500/30">
+                                    বাংলা ও বাংলিশ (প্রাণনাথ)
+                                </span>
+                            </div>
+                            <p class="text-[11px] text-slate-400">বিজ্ঞান, গণিত, অনুবাদ, ব্যক্তিগত পরামর্শ ও রুটিন সহায়িকা</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                        <button onclick="exportChatConversation()" title="Export Chat" class="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs transition border border-white/5">
+                            <i class="fa-solid fa-download"></i>
+                        </button>
+                        <button onclick="clearChatLogHistory()" title="Clear Chat" class="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs transition border border-white/5">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chat Stream -->
+                <div id="fullChatStream" class="flex-1 p-4 sm:p-6 overflow-y-auto space-y-4">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <!-- Attached Document Indicator -->
+                <div id="docAttachmentTray" class="hidden px-4 py-2 bg-indigo-950/70 border-t border-indigo-500/30 flex items-center justify-between text-xs text-indigo-200">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-file-circle-check text-cyan-400"></i>
+                        <span id="docAttachmentName">math_problem.pdf</span>
+                        <span class="text-[10px] bg-indigo-500/30 px-1.5 py-0.5 rounded">বিশ্লেষণের জন্য রেডি</span>
+                    </div>
+                    <button onclick="removeAttachedDocument()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <!-- Input Footer -->
+                <div class="p-3 sm:p-4 bg-slate-950/90 border-t border-white/10">
+                    <form id="mainChatForm" onsubmit="handleChatSubmit(event)" class="flex items-center gap-2">
+                        <label title="ফাইল বা ছবি আপলোড করুন" class="p-3 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-white/10 text-slate-300 cursor-pointer active:scale-95 transition">
+                            <i class="fa-solid fa-paperclip"></i>
+                            <input type="file" id="chatDocInput" class="hidden" onchange="handleDocAttachment(event)" accept="image/*,.pdf,.txt,.doc,.docx">
+                        </label>
+
+                        <div class="relative flex-1">
+                            <input id="chatTextInput" type="text" autocomplete="off" placeholder="এখানে বাংলায় বা ইংরেজিতে লিখুন (e.g. Sam, ei math ta solve kore dao)..." class="w-full bg-slate-900/90 border border-white/10 rounded-2xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition">
+                        </div>
+
+                        <button type="button" onclick="togglePushToTalkMode()" title="ভয়েসে বলুন" class="p-3 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-white/10 text-cyan-400 active:scale-95 transition">
+                            <i class="fa-solid fa-microphone"></i>
+                        </button>
+
+                        <button type="submit" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-cyan-500 via-indigo-600 to-pink-600 hover:opacity-90 text-white font-semibold text-sm flex items-center gap-1.5 shadow-lg shadow-cyan-500/20 active:scale-95 transition">
+                            <span>পাঠান</span>
+                            <i class="fa-solid fa-paper-plane text-xs"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: INDEPENDENT VOICE PROFILE STUDIO & SAM BENGALI VOICE -->
+        <div id="tabContent-studio" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1">
+            <!-- Studio Left: Personality Selector & Missing Bengali Voice Guide -->
+            <div class="lg:col-span-5 flex flex-col space-y-4">
+                <div class="glass-panel rounded-3xl p-5 space-y-4">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-pink-400"></i>
+                            <h3 class="text-sm font-bold text-white">Voice Profiles Selector</h3>
+                        </div>
+                        <span class="text-[10px] font-mono text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30">100% Isolated</span>
+                    </div>
+
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        প্রত্যেক সহকারীর জন্য স্বতন্ত্র ভয়েস ইঞ্জিন, পিচ, ও স্পিড সংরক্ষিত থাকে। একটি পরিবর্তন করলে অন্যটিতে কোনো প্রভাব পড়বে না।
+                    </p>
+
+                    <!-- Studio Profile Switcher Tabs -->
+                    <div class="grid grid-cols-3 gap-2 text-xs">
+                        <button onclick="setStudioActiveProfile('puja')" id="studioTab-puja" class="p-3 rounded-2xl border font-bold flex flex-col items-center gap-1.5 transition bg-pink-600 text-white shadow-lg shadow-pink-600/30 border-pink-500">
+                            <i class="fa-solid fa-heart text-sm"></i>
+                            <span>পূজা (Puja)</span>
+                            <span class="text-[9px] font-normal opacity-80">প্রাণনাথ</span>
+                        </button>
+                        <button onclick="setStudioActiveProfile('nabila')" id="studioTab-nabila" class="p-3 rounded-2xl border font-bold flex flex-col items-center gap-1.5 transition bg-slate-900 border-white/10 text-slate-300 hover:text-white">
+                            <i class="fa-solid fa-sparkles text-sm text-cyan-400"></i>
+                            <span>নাবিলা (Nabila)</span>
+                            <span class="text-[9px] font-normal opacity-80">Honey</span>
+                        </button>
+                        <button onclick="setStudioActiveProfile('sam')" id="studioTab-sam" class="p-3 rounded-2xl border font-bold flex flex-col items-center gap-1.5 transition bg-slate-900 border-white/10 text-slate-300 hover:text-white">
+                            <i class="fa-solid fa-shield-halved text-sm text-indigo-400"></i>
+                            <span>স্যাম (Sam)</span>
+                            <span class="text-[9px] font-normal opacity-80">Sir (Bangla)</span>
+                        </button>
+                    </div>
+
+                    <!-- Lock / Unlock Badge for active profile -->
+                    <div class="p-3 rounded-2xl bg-slate-950/70 border border-white/10 flex items-center justify-between text-xs">
+                        <div class="flex items-center gap-2">
+                            <i id="studioLockIcon" class="fa-solid fa-lock-open text-emerald-400"></i>
+                            <span id="studioLockText" class="font-bold text-emerald-300">PUJA PROFILE: UNLOCKED</span>
+                        </div>
+                        <button onclick="toggleActiveProfileLock()" id="studioLockActionBtn" class="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 border border-white/10 text-[11px] rounded-lg text-slate-200">
+                            লক করুন
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Missing Bengali Voice Detection & Installation Guide -->
+                <div id="bengaliVoiceGuideBox" class="glass-panel rounded-3xl p-5 space-y-3 border-amber-500/30">
+                    <div class="flex items-center gap-2 text-amber-400 text-xs font-bold">
+                        <i class="fa-solid fa-triangle-exclamation text-base"></i>
+                        <span>স্যাম ও সহকারীদের বাংলা ভয়েস সেটআপ গাইড</span>
+                    </div>
+                    <p class="text-[11px] text-slate-300 leading-relaxed">
+                        ব্রাউজারের সিন্থেসাইজারে বাংলা ভয়েস না থাকলে ইংরেজি উচ্চারণ দিয়ে বিকৃত শোনায়। ডিভাইসে আসল বাংলা ভয়েস যোগ করার নিয়ম:
+                    </p>
+                    <div class="text-[11px] text-slate-400 space-y-1.5 bg-slate-950/60 p-3 rounded-xl border border-white/5">
+                        <p><strong>অ্যান্ড্রয়েডে (Android):</strong> Settings → System → Languages & Input → Text-to-speech output → Google TTS ইঞ্জিন গিয়ার আইকন → Install voice data → Bengali (Bangladesh/India) ডাউনলোড করুন।</p>
+                        <p><strong>উইন্ডোজ/ম্যাকে (PC):</strong> Settings → Time & Language → Speech → Add Voices → Bengali সিলেক্ট করুন।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Studio Right: Detailed Independent Controls for Active Profile -->
+            <div class="lg:col-span-7 glass-panel rounded-3xl p-5 space-y-4">
+                <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                    <div>
+                        <h3 id="studioEditingTitle" class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-cyan-400"></i>
+                            <span>PUJA ভয়েস কনফিগারেশন ও অডিও টিউনিং</span>
+                        </h3>
+                        <p class="text-[11px] text-slate-400">নিচে পরিবর্তন করে "Save Profile" এ ক্লিক করুন</p>
+                    </div>
+                    <span id="studioPersonaLangBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-pink-500/20 text-pink-300 border border-pink-500/30">
+                        bn-BD (বাংলা)
+                    </span>
+                </div>
+
+                <!-- Form Controls -->
+                <div class="space-y-4 text-xs">
+                    <!-- Synthesizer Engine & Dedicated Voice Dropdown -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-semibold text-slate-200 mb-1">ভয়েস ইঞ্জিন (Synthesizer Engine)</label>
+                            <select id="studioEngineSelect" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-400">
+                                <option value="WebSpeech-Native">WebSpeech API (Device Native Voice)</option>
+                                <option value="WebAudio-Synthesizer">ARGON Harmonic Tone Synthesizer</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="font-semibold text-slate-200">নির্বাচিত ভয়েস (Voice)</label>
+                                <span id="bengaliFilterCount" class="text-[10px] text-emerald-400 font-mono"></span>
+                            </div>
+                            <select id="studioVoiceSelect" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-400">
+                                <option value="">ভয়েস লোড হচ্ছে...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Voice Sliders: Pitch, Rate, Volume -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                        <!-- Pitch -->
+                        <div class="glass-card p-3 rounded-2xl border border-white/5 space-y-1.5">
+                            <div class="flex justify-between text-slate-300">
+                                <span class="font-medium">Voice Pitch</span>
+                                <span id="studioPitchVal" class="font-mono text-cyan-300 font-bold">1.35</span>
+                            </div>
+                            <input id="studioPitchRange" type="range" min="0.5" max="2.0" step="0.05" value="1.35" oninput="handleStudioSlider('pitch', this.value)" class="w-full accent-pink-500">
+                            <span class="text-[9px] text-slate-500 block">উঁচু পিচ = মিষ্টি ও আদুরে স্বর</span>
+                        </div>
+
+                        <!-- Speaking Speed / Rate -->
+                        <div class="glass-card p-3 rounded-2xl border border-white/5 space-y-1.5">
+                            <div class="flex justify-between text-slate-300">
+                                <span class="font-medium">Speaking Speed</span>
+                                <span id="studioRateVal" class="font-mono text-cyan-300 font-bold">1.0</span>
+                            </div>
+                            <input id="studioRateRange" type="range" min="0.5" max="1.8" step="0.05" value="1.0" oninput="handleStudioSlider('rate', this.value)" class="w-full accent-cyan-400">
+                            <span class="text-[9px] text-slate-500 block">০.৮৫ (শান্ত) থেকে ১.১৫ (স্বাভাবিক)</span>
+                        </div>
+
+                        <!-- Volume -->
+                        <div class="glass-card p-3 rounded-2xl border border-white/5 space-y-1.5">
+                            <div class="flex justify-between text-slate-300">
+                                <span class="font-medium">Audio Volume</span>
+                                <span id="studioVolumeVal" class="font-mono text-cyan-300 font-bold">1.0</span>
+                            </div>
+                            <input id="studioVolumeRange" type="range" min="0.1" max="1.0" step="0.05" value="1.0" oninput="handleStudioSlider('volume', this.value)" class="w-full accent-indigo-400">
+                            <span class="text-[9px] text-slate-500 block">অডিও আউটপুট ভলিউম</span>
+                        </div>
+                    </div>
+
+                    <!-- Sam Bengali Optimization Notice -->
+                    <div id="samVoiceSpecificNote" class="p-3 rounded-2xl bg-indigo-950/50 border border-indigo-500/30 text-indigo-200 text-xs flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-indigo-400"></i>
+                            <div>
+                                <span class="font-bold">Sam এর খাঁটি বাংলা উচ্চারণ:</span>
+                                <p class="text-[10px] text-indigo-300">বাংলা বর্ণমালা ও সংখ্যার স্বাভাবিক উচ্চারণ বজায় রাখার জন্য Sam এর পিচ ০.৯০ এবং স্পিড ১.০৫ এ ক্যালিব্রেট করা।</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Buttons: Save & Preview -->
+                    <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-white/10">
+                        <button onclick="previewStudioVoice()" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-pink-300 border border-white/10 font-semibold text-xs flex items-center gap-2 active:scale-95 transition">
+                            <i class="fa-solid fa-play text-xs"></i>
+                            <span id="studioPreviewBtnLabel">ভয়েস শুনুন (Preview)</span>
+                        </button>
+                        <button onclick="saveActiveStudioProfile()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 hover:opacity-90 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-pink-600/30 active:scale-95 transition">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span id="studioSaveBtnLabel">প্রোফাইল সেভ করুন</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: LIFE ROUTINE & REMINDERS -->
+        <div id="tabContent-reminders" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1">
+            <div class="lg:col-span-5 glass-panel rounded-3xl p-5 space-y-4">
+                <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-cyan-400"></i>
+                        <span>রিমাইন্ডার ও অ্যালার্ম শিডিউলার</span>
+                    </h3>
+                    <span class="text-[10px] text-cyan-300 font-mono bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30">Smart Alarm</span>
+                </div>
+
+                <form onsubmit="handleReminderFormSubmit(event)" class="space-y-3 text-xs">
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">বিষয় বা কাজের নাম</label>
+                        <input id="reminderTitleInput" type="text" required placeholder="e.g. জল পান করা, মাকে ফোন করা, ওষুধ নেওয়া" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-slate-300 font-medium mb-1">তারিখ</label>
+                            <input id="reminderDateInput" type="date" required class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-400">
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 font-medium mb-1">সময়</label>
+                            <input id="reminderTimeInput" type="time" required class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-400">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-slate-300 font-medium mb-1">ক্যাটাগরি</label>
+                            <select id="reminderCategorySelect" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-400">
+                                <option value="routine">দৈনন্দিন রুটিন</option>
+                                <option value="health">জল ও স্বাস্থ্য</option>
+                                <option value="alarm">সকালের অ্যালার্ম</option>
+                                <option value="call">কল বা পরিবার</option>
+                                <option value="task">কাজের টাস্ক</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 font-medium mb-1">পুনরাবৃত্তি</label>
+                            <select id="reminderRecurrenceSelect" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-400">
+                                <option value="once">একবার (One-time)</option>
+                                <option value="daily">প্রতিদিন (Daily)</option>
+                                <option value="hourly2">প্রতি ২ ঘণ্টা পর পর (জল)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">অ্যালার্মে যা বলবে (Spoken Note)</label>
+                        <input id="reminderSpokenInput" type="text" placeholder="e.g. প্রাণনাথ, জল খাবার সময় হয়েছে..." class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+
+                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-bold shadow-lg shadow-cyan-500/20 hover:opacity-90 active:scale-98 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> শিডিউল সংরক্ষণ করুন
+                    </button>
+                </form>
+
+                <!-- Quick Presets -->
+                <div class="pt-3 border-t border-white/10">
+                    <h4 class="text-xs font-semibold text-slate-400 mb-2">১-ক্লিক স্বাস্থ্য ও ঘুম রুটিন</h4>
+                    <div class="grid grid-cols-2 gap-2 text-[11px]">
+                        <button onclick="addPresetLifeRoutine('water')" class="p-2 bg-slate-900 hover:bg-cyan-950/40 border border-cyan-500/20 text-cyan-300 rounded-xl flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-droplet"></i> জল ২ ঘণ্টা পর পর
+                        </button>
+                        <button onclick="addPresetLifeRoutine('lunch')" class="p-2 bg-slate-900 hover:bg-amber-950/40 border border-amber-500/20 text-amber-300 rounded-xl flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-bowl-food"></i> দুপুরের খাবার (১:৩০ PM)
+                        </button>
+                        <button onclick="addPresetLifeRoutine('sleep')" class="p-2 bg-slate-900 hover:bg-purple-950/40 border border-purple-500/20 text-purple-300 rounded-xl flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-moon"></i> ঘুমাতে যাওয়া (১১:৩০ PM)
+                        </button>
+                        <button onclick="addPresetLifeRoutine('wakeup')" class="p-2 bg-slate-900 hover:bg-emerald-950/40 border border-emerald-500/20 text-emerald-300 rounded-xl flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-sun"></i> সকালের ঘুম ভাঙা (৭:০০ AM)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 glass-panel rounded-3xl p-5 flex flex-col space-y-4">
+                <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                    <div>
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-indigo-400"></i>
+                            <span>সক্রিয় অ্যালার্ম ও রিমাইন্ডার তালিকা</span>
+                        </h3>
+                        <p class="text-[11px] text-slate-400">প্রতি মিনিটে ব্যাকগ্রাউন্ড টাইম চেক করে অ্যালার্ম ও নোটিফিকেশন পাঠায়</p>
+                    </div>
+                    <button onclick="requestBrowserNotificationPermission()" class="text-xs px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-white/10 text-cyan-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-bell"></i> <span id="notificationPermLabel">নোটিফিকেশন পারমিশন</span>
+                    </button>
+                </div>
+
+                <div id="activeRemindersList" class="flex-1 overflow-y-auto space-y-2.5 max-h-[550px] pr-1">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: WHATSAPP HUB & COMMUNICATION -->
+        <div id="tabContent-whatsapp" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1">
+            <div class="lg:col-span-7 glass-panel rounded-3xl p-5 space-y-4">
+                <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                            <i class="fa-brands fa-whatsapp text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-white">WhatsApp স্মার্ট ড্রাফট ও চ্যাট হাব</h3>
+                            <p class="text-[11px] text-slate-400">মেসেজ ড্রাফট করুন, রিভিউ করুন এবং সরাসরি সেন্ড করুন</p>
+                        </div>
+                    </div>
+                    <button onclick="openWhatsAppWeb()" class="text-xs px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold flex items-center gap-1.5 transition shadow-lg shadow-emerald-600/30">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> WhatsApp Web
+                    </button>
+                </div>
+
+                <div class="space-y-3 text-xs">
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">প্রাপকের ফোন নম্বর (Country code সহ, e.g. 8801700000000)</label>
+                        <input id="waPhoneInput" type="text" placeholder="8801XXXXXXXXX" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-emerald-400">
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="text-slate-300 font-medium">মেসেজ ড্রাফট</label>
+                            <button onclick="generateAIWhatsAppDraft()" class="text-[11px] text-pink-400 hover:text-pink-300 flex items-center gap-1">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> AI দিয়ে ড্রাফট লিখুন
+                            </button>
+                        </div>
+                        <textarea id="waMessageInput" rows="4" placeholder="মেসেজ লিখুন অথবা বলুন 'Puja, Nabila ke bolo ami 10 minute por ashchi'..." class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-emerald-400"></textarea>
+                    </div>
+
+                    <div class="p-3.5 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-200 space-y-1.5">
+                        <span class="font-bold flex items-center gap-1.5 text-xs">
+                            <i class="fa-solid fa-shield-check text-emerald-400"></i> মানুষের অনুমোদন সাপেক্ষে সেন্ড (Approval Gate)
+                        </span>
+                        <p class="text-[11px] text-slate-300 leading-relaxed">
+                            ARGON কখনো গোপনে মেসেজ পাঠায় না। আপনার অনুমোদনে অফিসিয়াল WhatsApp এ মেসেজটি প্রি-ফিল্ড আকারে ওপেন হবে।
+                        </p>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button onclick="sendApprovedWhatsApp()" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 active:scale-98 transition">
+                            <i class="fa-brands fa-whatsapp text-sm"></i> Approve & Open WhatsApp
+                        </button>
+                        <button onclick="clearWhatsAppInputs()" class="px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-white/10 text-xs transition">
+                            মুছুন
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WhatsApp Technical Constraints & Architecture Notice -->
+            <div class="lg:col-span-5 glass-panel rounded-3xl p-5 space-y-3.5 text-xs text-slate-300">
+                <div class="flex items-center space-x-2 border-b border-white/10 pb-3">
+                    <i class="fa-brands fa-android text-emerald-400 text-lg"></i>
+                    <div>
+                        <h3 class="text-sm font-bold text-white">অ্যান্ড্রয়েড ও ব্রাউজার আর্কিটেকচার</h3>
+                        <p class="text-[11px] text-slate-400">প্রাইভেসি ও টেকনিক্যাল নিরাপত্তা বিশ্লেষণ</p>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-900/80 border border-white/5 space-y-1">
+                    <h4 class="font-bold text-amber-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-shield-halved"></i> ব্রাউজার স্যান্ডবক্স সীমাবদ্ধতা:
+                    </h4>
+                    <p class="text-[11px] text-slate-400 leading-relaxed">
+                        একটি সাধারণ ওয়েব অ্যাপ ডিভাইস সিকিউরিটি এড়িয়ে অ্যান্ড্রয়েডের প্রাইভেট এসএমএস বা হোয়াটসঅ্যাপ নোটিফিকেশন সরাসরি পড়তে পারে না।
+                    </p>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-900/80 border border-white/5 space-y-1">
+                    <h4 class="font-bold text-emerald-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-link"></i> ফুল ইনকামিং সিঙ্ক বাস্তবায়নে যা প্রয়োজন:
+                    </h4>
+                    <p class="text-[11px] text-slate-400">
+                        ১. অ্যান্ড্রয়েড কম্প্যানিয়ন অ্যাপ (APK) যাতে <code class="text-cyan-300">NotificationListenerService</code> পারমিশন দেওয়া থাকে।<br>
+                        ২. হোয়াটসঅ্যাপ বিজনেস ক্লাউড ওয়েবহুক এপিআই।
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 6: SETTINGS, GEMINI API & LONG-TERM MEMORY -->
+        <div id="tabContent-settings" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-5 flex-1">
+            <!-- Left: API & Persona Settings -->
+            <div class="lg:col-span-6 glass-panel rounded-3xl p-5 space-y-4">
+                <h3 class="text-sm font-bold text-white border-b border-white/10 pb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-cyan-400"></i>
+                    <span>সহকারী ও এআই ব্রেন কনফিগারেশন</span>
+                </h3>
+
+                <div class="space-y-3.5 text-xs">
+                    <div>
+                        <label class="block font-semibold text-slate-200 mb-1">Google Gemini API Key (ঐচ্ছিক)</label>
+                        <input id="geminiApiKeyInput" type="password" placeholder="AI Studio Key পেস্ট করুন (ডিফল্ট অফলাইনে লোকাল ব্রেন সক্রিয়)..." class="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono focus:outline-none focus:border-cyan-400">
+                        <p class="text-[11px] text-slate-400 mt-1">
+                            কী না দিলেও ARGON এর সমৃদ্ধ অন্তর্নির্মিত বাংলা রুল ইঞ্জিন, গণিত সমাধান ও শিডিউলার পুরোপুরি কার্যকর থাকবে।
+                        </p>
+                    </div>
+
+                    <!-- Custom Honorifics -->
+                    <div class="grid grid-cols-3 gap-2">
+                        <div>
+                            <label class="block text-slate-400 mb-1">Puja সম্বোধন</label>
+                            <input id="customHonorificPuja" type="text" value="প্রাণনাথ" class="w-full bg-slate-900 border border-white/10 rounded-xl px-2.5 py-2 text-white text-xs font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Nabila সম্বোধন</label>
+                            <input id="customHonorificNabila" type="text" value="Honey" class="w-full bg-slate-900 border border-white/10 rounded-xl px-2.5 py-2 text-white text-xs font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1">Sam সম্বোধন</label>
+                            <input id="customHonorificSam" type="text" value="Sir" class="w-full bg-slate-900 border border-white/10 rounded-xl px-2.5 py-2 text-white text-xs font-semibold">
+                        </div>
+                    </div>
+
+                    <button onclick="saveGlobalAppSettings()" class="w-full py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs shadow-lg shadow-cyan-600/30 transition">
+                        সেটিংস সেভ করুন
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right: Long-Term Memory Bank -->
+            <div class="lg:col-span-6 glass-panel rounded-3xl p-5 space-y-4">
+                <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-brain text-purple-400"></i>
+                        <span>ARGON পার্সোনাল মেমরি ব্যাংক (Long-Term Memory)</span>
+                    </h3>
+                    <button onclick="clearAllMemoryRecords()" class="text-xs text-rose-400 hover:text-rose-300">
+                        সব মুছুন
+                    </button>
+                </div>
+
+                <form onsubmit="handleMemoryFormSubmit(event)" class="space-y-2 text-xs">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <input id="memKeyInput" type="text" required placeholder="স্মৃতির শিরোনাম (e.g. প্রিয় খাবার, লক্ষ্য)" class="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-white">
+                        <input id="memValInput" type="text" required placeholder="তথ্য (e.g. সকালে চিনি ছাড়া কফি)" class="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-white">
+                    </div>
+                    <button type="submit" class="w-full py-2 bg-purple-600 hover:bg-purple-500 text-white font-semibold rounded-xl transition">
+                        মেমরিতে সেভ করুন
+                    </button>
+                </form>
+
+                <div id="memoryItemsList" class="space-y-2 max-h-[300px] overflow-y-auto pr-1 text-xs">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Ringing Alarm Modal Overlay -->
+    <div id="ringingAlarmModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 border-2 border-pink-500 shadow-2xl text-center space-y-4">
+            <div class="w-16 h-16 rounded-full bg-pink-600/30 border border-pink-500 text-pink-400 flex items-center justify-center mx-auto text-2xl animate-pulse">
+                <i class="fa-solid fa-bell"></i>
+            </div>
+            <div>
+                <span id="alarmPersonaLabel" class="text-xs uppercase font-mono px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30">
+                    PUJA ALERT
+                </span>
+                <h3 id="alarmActiveTitle" class="text-lg font-bold text-white mt-2">সময় হয়েছে!</h3>
+                <p id="alarmActiveSpoken" class="text-xs text-pink-200 italic mt-1">"প্রাণনাথ, জল খাবার সময় হয়েছে।"</p>
+            </div>
+
+            <div class="flex gap-3 pt-2">
+                <button onclick="snoozeActiveAlarm(5)" class="flex-1 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs transition">
+                    <i class="fa-solid fa-clock-rotate-left mr-1"></i> ৫ মিনিট স্নুজ
+                </button>
+                <button onclick="dismissActiveAlarm()" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 hover:opacity-90 text-white font-bold text-xs shadow-lg shadow-pink-600/30 transition">
+                    <i class="fa-solid fa-check mr-1"></i> সম্পন্ন (Dismiss)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Floating Toast Notification -->
+    <div id="appToast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="glass-panel px-4 py-3 rounded-2xl border border-cyan-500/40 text-xs text-white flex items-center gap-2.5 shadow-2xl">
+            <i id="toastIconEl" class="fa-solid fa-circle-check text-cyan-400 text-sm"></i>
+            <span id="toastMessageEl">সম্পন্ন</span>
+        </div>
+    </div>
+
+    <!-- Application Core Engine Script -->
+    <script>
+        /**
+         * ARGON AI - Production Architecture
+         */
+        const ARGON = {
+            currentPersona: 'puja', // 'puja' | 'nabila' | 'sam'
+            studioActivePersona: 'puja',
+            apiKey: '',
+            audioCtx: null,
+            screenWakeLock: null,
+            isPushTalking: false,
+            isSpeaking: false,
+            wakeWordActive: true,
+            hasMicPermission: false,
+            attachedDoc: null,
+            currentAlarm: null,
+
+            // Orb State Machine: 'IDLE' | 'LISTENING' | 'WAKE_DETECTED' | 'PROCESSING' | 'SPEAKING' | 'ERROR'
+            orbState: 'IDLE',
+
+            // Persona specifications (ALL THREE PERSONAS IN BANGLA)
+            personas: {
+                puja: {
+                    name: 'Puja',
+                    banglaName: 'পূজা',
+                    honorific: 'প্রাণনাথ', // MANDATORY: Always Prananath
+                    langCode: 'bn-BD',
+                    accentColor: 'pink',
+                    orbGradient: 'from-pink-600 via-purple-600 to-indigo-600',
+                    tag: 'বাংলা ও বাংলিশ (প্রাণনাথ)',
+                    icon: 'fa-heart',
+                    activationPrompt: 'জি প্রাণনাথ, বলুন। আমি শুনছি।',
+                    systemInstruction: `You are Puja, a deeply devoted, loving, traditional and intelligent Bengali AI life companion.
+CRITICAL MANDATORY RULES:
+1. You must ALWAYS address the user as "প্রাণনাথ" (Prananath) in every single reply without fail.
+2. Your primary and default language is Bengali (বাংলা) and Banglish. Never speak English unless the user explicitly asks: "speak in English".
+3. Speak with warmth, care, devotion, and intellectual depth. Provide step-by-step guidance.`
+                },
+                nabila: {
+                    name: 'Nabila',
+                    banglaName: 'নাবিলা',
+                    honorific: 'Honey', // MANDATORY: Always Honey
+                    langCode: 'bn-BD',
+                    accentColor: 'cyan',
+                    orbGradient: 'from-cyan-500 via-teal-500 to-indigo-600',
+                    tag: 'বাংলা ও বাংলিশ (Honey)',
+                    icon: 'fa-sparkles',
+                    activationPrompt: 'Honey, আমি শুনছি। বলুন আপনার জন্য কী করতে পারি?',
+                    systemInstruction: `You are Nabila, a modern, sweet, playful, affectionate and intelligent Bengali AI assistant.
+CRITICAL MANDATORY RULES:
+1. You must ALWAYS address the user as "Honey" in every single reply.
+2. Your default response language MUST be Bengali (বাংলা) or Banglish. Never reply in English unless the user explicitly requests: "speak in English".
+3. Be vibrant, affectionate, cheerful, and helpful.`
+                },
+                sam: {
+                    name: 'Sam',
+                    banglaName: 'স্যাম',
+                    honorific: 'Sir', // MANDATORY: Always Sir
+                    langCode: 'bn-BD',
+                    accentColor: 'indigo',
+                    orbGradient: 'from-indigo-600 via-blue-600 to-cyan-600',
+                    tag: 'বিশ্লেষণধর্মী বাংলা (Sir)',
+                    icon: 'fa-shield-halved',
+                    activationPrompt: 'জি Sir, আমি শুনছি। কীভাবে সাহায্য করতে পারি বলুন।',
+                    systemInstruction: `You are Sam, an executive, sharp, polite, and highly intelligent personal AI strategist.
+CRITICAL MANDATORY RULES:
+1. You must ALWAYS address the user as "Sir".
+2. Your default response language MUST be clear, natural Bengali (বাংলা) or Banglish. Never reply in English unless the user explicitly requests: "speak in English".
+3. For math, science, programming, and technical queries, solve them step-by-step with clear Bengali explanations.`
+                }
+            },
+
+            // 3 STRICT INDEPENDENT VOICE CONFIGURATION PROFILES
+            voiceProfiles: {
+                puja: {
+                    engine: 'WebSpeech-Native',
+                    voiceURI: '',
+                    pitch: 1.35,
+                    rate: 1.0,
+                    volume: 1.0,
+                    locked: false
+                },
+                nabila: {
+                    engine: 'WebSpeech-Native',
+                    voiceURI: '',
+                    pitch: 1.15,
+                    rate: 0.95,
+                    volume: 1.0,
+                    locked: false
+                },
+                sam: {
+                    engine: 'WebSpeech-Native',
+                    voiceURI: '',
+                    pitch: 0.90, // Calibrated for natural male/executive Bengali resonance
+                    rate: 1.05,
+                    volume: 1.0,
+                    locked: false
+                }
+            },
+
+            reminders: [],
+            memories: [
+                { id: '1', key: 'লক্ষ্য', value: 'প্রতিদিন প্রয়োজনীয় কাজগুলো গুছিয়ে সম্পন্ন করা' },
+                { id: '2', key: 'জল পান', value: 'প্রতিদিন আড়াই থেকে তিন লিটার জল পান' },
+                { id: '3', key: 'ঘুম', value: 'রাত ১১:৩০ মিনিটে ঘুম এবং সকাল ৭টায় ওঠা' }
+            ]
+        };
+
+        // DOM Element references
+        const coreOrbSphere = document.getElementById('coreOrbSphere');
+        const orbStateIndicator = document.getElementById('orbStateIndicator');
+        const orbStateLabel = document.getElementById('orbStateLabel');
+        const orbMainHeading = document.getElementById('orbMainHeading');
+        const orbSubCaption = document.getElementById('orbSubCaption');
+        const orbCenterIcon = document.getElementById('orbCenterIcon');
+        const radarRing1 = document.getElementById('radarRing1');
+        const radarRing2 = document.getElementById('radarRing2');
+        const wakeBurstBadge = document.getElementById('wakeBurstBadge');
+        const wakeDetectedName = document.getElementById('wakeDetectedName');
+        const waveBars = document.querySelectorAll('.wave-bar');
+        const liveTranscriptDisplay = document.getElementById('liveTranscriptDisplay');
+        const fullChatStream = document.getElementById('fullChatStream');
+        const miniChatContainer = document.getElementById('miniChatContainer');
+
+        /* -------------------------------------------------------------
+         * INITIALIZATION LIFECYCLE
+         * ------------------------------------------------------------- */
+        window.addEventListener('DOMContentLoaded', async () => {
+            loadAllStorage();
+            initLiveClock();
+            initAudioContextOnUserTouch();
+            initVoiceSynthesisCatalog();
+            initSpeechRecognitionController();
+            initReminderTicker();
+            renderRemindersTable();
+            renderMemoryTable();
+            renderInitialWelcomeChat();
+            syncStudioControlsUI();
+            requestScreenWakeLock();
+        });
+
+        function loadAllStorage() {
+            try {
+                const savedProfiles = localStorage.getItem('argon_voice_profiles_v2');
+                if (savedProfiles) {
+                    const parsed = JSON.parse(savedProfiles);
+                    ['puja', 'nabila', 'sam'].forEach(k => {
+                        if (parsed[k]) ARGON.voiceProfiles[k] = { ...ARGON.voiceProfiles[k], ...parsed[k] };
+                    });
+                }
+                const savedReminders = localStorage.getItem('argon_reminders_v2');
+                if (savedReminders) ARGON.reminders = JSON.parse(savedReminders);
+
+                const savedMemories = localStorage.getItem('argon_memories_v2');
+                if (savedMemories) ARGON.memories = JSON.parse(savedMemories);
+
+                const savedKey = localStorage.getItem('argon_gemini_key_v2');
+                if (savedKey) {
+                    ARGON.apiKey = savedKey;
+                    const el = document.getElementById('geminiApiKeyInput');
+                    if (el) el.value = savedKey;
+                }
+            } catch (e) {
+                console.warn('Storage read warning:', e);
+            }
+        }
+
+        function saveAllStorage() {
+            try {
+                localStorage.setItem('argon_voice_profiles_v2', JSON.stringify(ARGON.voiceProfiles));
+                localStorage.setItem('argon_reminders_v2', JSON.stringify(ARGON.reminders));
+                localStorage.setItem('argon_memories_v2', JSON.stringify(ARGON.memories));
+                localStorage.setItem('argon_gemini_key_v2', ARGON.apiKey);
+            } catch (e) {
+                console.warn('Storage write warning:', e);
+            }
+            updateReminderCountBadge();
+        }
+
+        function updateReminderCountBadge() {
+            const count = ARGON.reminders.filter(r => !r.completed).length;
+            const badge = document.getElementById('remindersCountBadge');
+            if (badge) badge.innerText = count;
+        }
+
+        function initLiveClock() {
+            function update() {
+                const now = new Date();
+                const clock = document.getElementById('liveClock');
+                if (clock) {
+                    clock.innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                }
+            }
+            update();
+            setInterval(update, 1000);
+        }
+
+        function initAudioContextOnUserTouch() {
+            const unlock = () => {
+                if (!ARGON.audioCtx) {
+                    const AC = window.AudioContext || window.webkitAudioContext;
+                    if (AC) ARGON.audioCtx = new AC();
+                }
+                if (ARGON.audioCtx && ARGON.audioCtx.state === 'suspended') {
+                    ARGON.audioCtx.resume();
+                }
+            };
+            window.addEventListener('click', unlock, { once: true });
+            window.addEventListener('touchstart', unlock, { once: true });
+        }
+
+        /* -------------------------------------------------------------
+         * SCREEN WAKE LOCK API (Prevents Mobile Sleep)
+         * ------------------------------------------------------------- */
+        async function requestScreenWakeLock() {
+            if ('wakeLock' in navigator) {
+                try {
+                    ARGON.screenWakeLock = await navigator.wakeLock.request('screen');
+                    const badge = document.getElementById('screenLockStatus');
+                    if (badge) {
+                        badge.innerHTML = `<i class="fa-solid fa-lightbulb text-amber-400"></i> WakeLock: Active`;
+                        badge.className = "bg-amber-950/60 border border-amber-500/30 px-2 py-1 rounded-xl text-[10px] text-amber-300 flex items-center gap-1";
+                    }
+                    ARGON.screenWakeLock.addEventListener('release', () => {
+                        ARGON.screenWakeLock = null;
+                        const b = document.getElementById('screenLockStatus');
+                        if (b) b.innerHTML = `<i class="fa-solid fa-shield"></i> WakeLock: Standby`;
+                    });
+                } catch (err) {
+                    console.debug('WakeLock error:', err);
+                }
+            }
+        }
+
+        function toggleScreenWakeLock() {
+            if (ARGON.screenWakeLock) {
+                ARGON.screenWakeLock.release().then(() => {
+                    ARGON.screenWakeLock = null;
+                    showToast("Screen WakeLock deactivated");
+                });
+            } else {
+                requestScreenWakeLock().then(() => {
+                    showToast("Screen WakeLock active (Screen will stay awake)");
+                });
+            }
+        }
+
+        function dismissMobileBanner() {
+            const b = document.getElementById('mobileLimitationBanner');
+            if (b) b.classList.add('hidden');
+        }
+
+        /* -------------------------------------------------------------
+         * 6 DISTINCT ASSISTANT ORB STATES & VISUAL ENGINE
+         * ------------------------------------------------------------- */
+        function setOrbState(newState, extraInfo = '') {
+            ARGON.orbState = newState;
+            const p = ARGON.personas[ARGON.currentPersona];
+
+            // Reset dynamic radar rings & bursts
+            radarRing1.classList.add('hidden');
+            radarRing2.classList.add('hidden');
+            wakeBurstBadge.classList.add('hidden');
+            stopAudioWaveformAnimation();
+
+            switch (newState) {
+                case 'IDLE':
+                    orbStateLabel.innerText = 'IDLE';
+                    orbStateIndicator.className = 'font-mono text-[11px] px-2.5 py-0.5 rounded-full border flex items-center gap-1.5 bg-emerald-950/60 border-emerald-500/40 text-emerald-300';
+                    coreOrbSphere.className = `w-36 h-36 rounded-full bg-gradient-to-tr ${p.orbGradient} p-1 shadow-2xl shadow-${p.accentColor}-600/50 animate-orb-idle flex items-center justify-center transition-all duration-300`;
+                    orbCenterIcon.className = `fa-solid ${p.icon} text-2xl text-white mb-1`;
+                    orbMainHeading.innerText = 'IDLE';
+                    orbSubCaption.innerText = `ডাকুন: "${p.name}" / "${p.banglaName}"`;
+                    break;
+
+                case 'LISTENING':
+                    orbStateLabel.innerText = 'LISTENING';
+                    orbStateIndicator.className = 'font-mono text-[11px] px-2.5 py-0.5 rounded-full border flex items-center gap-1.5 bg-cyan-950/60 border-cyan-500/40 text-cyan-300 animate-pulse';
+                    coreOrbSphere.className = `w-36 h-36 rounded-full bg-gradient-to-tr from-cyan-400 via-teal-400 to-indigo-600 p-1 shadow-2xl shadow-cyan-400/80 scale-105 flex items-center justify-center transition-all duration-300`;
+                    orbCenterIcon.className = 'fa-solid fa-ear-listen text-2xl text-cyan-200 mb-1 animate-bounce';
+                    orbMainHeading.innerText = 'শুনছি...';
+                    orbSubCaption.innerText = 'স্পষ্ট করে বলুন';
+                    radarRing1.classList.remove('hidden');
+                    radarRing2.classList.remove('hidden');
+                    startAudioWaveformAnimation();
+                    break;
+
+                case 'WAKE_DETECTED':
+                    orbStateLabel.innerText = 'WAKE DETECTED';
+                    orbStateIndicator.className = 'font-mono text-[11px] px-2.5 py-0.5 rounded-full border flex items-center gap-1.5 bg-pink-950/80 border-pink-500/60 text-pink-300';
+                    wakeBurstBadge.classList.remove('hidden');
+                    wakeDetectedName.innerText = (extraInfo || p.name).toUpperCase();
+                    coreOrbSphere.className = `w-36 h-36 rounded-full bg-gradient-to-tr from-pink-500 via-rose-500 to-amber-500 p-1 shadow-2xl shadow-pink-500/90 scale-110 flex items-center justify-center transition-all duration-300`;
+                    orbCenterIcon.className = 'fa-solid fa-bolt text-2xl text-amber-200 mb-1';
+                    orbMainHeading.innerText = (extraInfo || p.name).toUpperCase();
+                    orbSubCaption.innerText = 'জাগ্রত হচ্ছে...';
+                    break;
+
+                case 'PROCESSING':
+                    orbStateLabel.innerText = 'PROCESSING';
+                    orbStateIndicator.className = 'font-mono text-[11px] px-2.5 py-0.5 rounded-full border flex items-center gap-1.5 bg-purple-950/70 border-purple-500/50 text-purple-300';
+                    coreOrbSphere.className = `w-36 h-36 rounded-full bg-gradient-to-tr from-purple-600 via-indigo-600 to-pink-600 p-1 shadow-2xl shadow-purple-600/70 flex items-center justify-center transition-all duration-300`;
+                    orbCenterIcon.className = 'fa-solid fa-atom text-2xl text-purple-200 mb-1 animate-spin';
+                    orbMainHeading.innerText = 'ভাবছি...';
+                    orbSubCaption.innerText = 'সমাধান তৈরি হচ্ছে';
+                    break;
+
+                case 'SPEAKING':
+                    orbStateLabel.innerText = 'SPEAKING';
+                    orbStateIndicator.className = 'font-mono text-[11px] px-2.5 py-0.5 rounded-full border flex items-center gap-1.5 bg-pink-950/60 border-pink-500/40 text-pink-300';
+                    coreOrbSphere.className = `w-36 h-36 rounded-full bg-gradient-to-tr ${p.orbGradient} p-1 shadow-2xl shadow-${p.accentColor}-500/90 animate-pulse flex items-center justify-center transition-all duration-300`;
+                    orbCenterIcon.className = 'fa-solid fa-waveform-lines text-2xl text-white mb-1';
+                    orbMainHeading.innerText = 'বলছি...';
+                    orbSubCaption.innerText = `${p.name} কথা বলছে`;
+                    startAudioWaveformAnimation();
+                    break;
+
+                case 'ERROR':
+                    orbStateLabel.innerText = 'ERROR';
+                    orbStateIndicator.className = 'font-mono text-[11px] px-2.5 py-0.5 rounded-full border flex items-center gap-1.5 bg-rose-950/80 border-rose-500/70 text-rose-300';
+                    coreOrbSphere.className = `w-36 h-36 rounded-full bg-gradient-to-tr from-rose-700 via-red-600 to-amber-600 p-1 shadow-2xl shadow-rose-600/80 flex items-center justify-center transition-all duration-300`;
+                    orbCenterIcon.className = 'fa-solid fa-triangle-exclamation text-2xl text-rose-200 mb-1';
+                    orbMainHeading.innerText = 'ERROR';
+                    orbSubCaption.innerText = extraInfo || 'মাইক অনুমতি প্রয়োজন';
+                    break;
+            }
+        }
+
+        let waveIntervalTimer = null;
+        function startAudioWaveformAnimation() {
+            if (waveIntervalTimer) clearInterval(waveIntervalTimer);
+            waveIntervalTimer = setInterval(() => {
+                waveBars.forEach(bar => {
+                    const h = Math.floor(Math.random() * 26) + 4;
+                    bar.style.height = `${h}px`;
+                });
+            }, 75);
+        }
+
+        function stopAudioWaveformAnimation() {
+            if (waveIntervalTimer) clearInterval(waveIntervalTimer);
+            waveBars.forEach((bar, idx) => {
+                bar.style.height = `${[6, 12, 18, 24, 16, 10, 6][idx % 7]}px`;
+            });
+        }
+
+        /* -------------------------------------------------------------
+         * ROBUST WAKE-WORD & CONTINUOUS VOICE RECOGNITION ENGINE
+         * ------------------------------------------------------------- */
+        let recognitionSession = null;
+        let isSessionActive = false;
+        let restartDebounceTimer = null;
+
+        async function verifyMicrophoneHardware() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                // Stop tracks immediately after verifying permission
+                stream.getTracks().forEach(t => t.stop());
+                ARGON.hasMicPermission = true;
+                hideErrorDiagnostic();
+                return true;
+            } catch (err) {
+                console.warn('Microphone permission check failed:', err);
+                ARGON.hasMicPermission = false;
+                showErrorDiagnostic('মাইক্রোফোন অ্যাক্সেস ব্লক করা', 'ব্রাউজারে মাইক্রোফোনের অনুমতি দেওয়া হয়নি। দয়া করে ব্রাউজার সেটিংসে গিয়ে Microphone: Allow করুন।');
+                return false;
+            }
+        }
+
+        function initSpeechRecognitionController() {
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRec) {
+                console.warn('Web Speech API recognition unsupported');
+                showErrorDiagnostic('ব্রাউজার সাপোর্ট নেই', 'আপনার ব্রাউজার Web Speech API সাপোর্ট করে না। Google Chrome ব্যবহার করার পরামর্শ দেওয়া হচ্ছে।');
+                return;
+            }
+
+            // Create single isolated controller session
+            recognitionSession = new SpeechRec();
+            recognitionSession.continuous = true;
+            recognitionSession.interimResults = true;
+            recognitionSession.lang = 'bn-BD'; // High recognition accuracy for Bengali & English phonetics
+
+            recognitionSession.onstart = () => {
+                isSessionActive = true;
+                if (!ARGON.isSpeaking) {
+                    setOrbState('IDLE');
+                }
+            };
+
+            recognitionSession.onresult = (event) => {
+                if (ARGON.isSpeaking) return;
+
+                let transcriptBuffer = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    transcriptBuffer += event.results[i][0].transcript;
+                }
+                transcriptBuffer = transcriptBuffer.trim();
+
+                if (transcriptBuffer && liveTranscriptDisplay) {
+                    liveTranscriptDisplay.innerHTML = `শুনছি: <span class="text-cyan-300 font-semibold">"${transcriptBuffer}"</span>`;
+                }
+
+                evaluateSpokenInput(transcriptBuffer, event.results[event.resultIndex].isFinal);
+            };
+
+            recognitionSession.onerror = (e) => {
+                if (e.error === 'no-speech') return; // Natural timeout, ignore
+                if (e.error === 'not-allowed') {
+                    ARGON.hasMicPermission = false;
+                    showErrorDiagnostic('মাইক পারমিশন বাতিল', 'অনুগ্রহ করে মাইক্রোফোন অন করুন।');
+                    setOrbState('ERROR', 'মাইক পারমিশন ডিনাইড');
+                    return;
+                }
+                console.debug('Recognition event notice:', e.error);
+            };
+
+            recognitionSession.onend = () => {
+                isSessionActive = false;
+                // Graceful auto-restart for continuous wake word
+                if (ARGON.wakeWordActive && !ARGON.isPushTalking && !ARGON.isSpeaking) {
+                    clearTimeout(restartDebounceTimer);
+                    restartDebounceTimer = setTimeout(() => {
+                        startRecognitionSessionSafe();
+                    }, 400);
+                }
+            };
+
+            // Initial start
+            verifyMicrophoneHardware().then(allowed => {
+                if (allowed && ARGON.wakeWordActive) {
+                    startRecognitionSessionSafe();
+                }
+            });
+        }
+
+        function startRecognitionSessionSafe() {
+            if (!recognitionSession || isSessionActive) return;
+            try {
+                recognitionSession.start();
+            } catch (err) {
+                // Ignore already started errors
+            }
+        }
+
+        function stopRecognitionSessionSafe() {
+            if (!recognitionSession || !isSessionActive) return;
+            try {
+                recognitionSession.stop();
+            } catch (err) {}
+        }
+
+        function evaluateSpokenInput(transcript, isFinal) {
+            const raw = transcript.toLowerCase();
+
+            // 1. Check for Puja wake triggers
+            if (raw.includes('puja') || raw.includes('পূজা') || raw.includes('পুজা')) {
+                handleAssistantWakeTrigger('puja', transcript, ['puja', 'পূজা', 'পুজা', 'hey puja', 'পূজা শোনো', 'শোনো পূজা']);
+                return;
+            }
+
+            // 2. Check for Nabila wake triggers
+            if (raw.includes('nabila') || raw.includes('নাবিলা') || raw.includes('নাবিলা শোনো')) {
+                handleAssistantWakeTrigger('nabila', transcript, ['nabila', 'নাবিলা', 'hey nabila', 'নাবিলা শোনো']);
+                return;
+            }
+
+            // 3. Check for Sam wake triggers
+            if (raw.includes('sam') || raw.includes('স্যাম') || raw.includes('স্যাম শোনো')) {
+                handleAssistantWakeTrigger('sam', transcript, ['sam', 'স্যাম', 'hey sam', 'স্যাম শোনো']);
+                return;
+            }
+
+            // If user was using Push to talk and sentence is final
+            if (ARGON.isPushTalking && isFinal) {
+                endPushToTalkMode(transcript);
+            }
+        }
+
+        function handleAssistantWakeTrigger(summonedKey, fullPhrase, tokensToRemove) {
+            // Stop speech and update state
+            stopAssistantSpeech(false);
+            playSynthesizerWakeChime();
+
+            // Switch to summoned persona
+            switchPersona(summonedKey, false);
+
+            setOrbState('WAKE_DETECTED', summonedKey);
+
+            // Strip wake words to see if query is directly appended (e.g. "Sam, kal sokale 7 tay uthaye dio")
+            let strippedCommand = fullPhrase;
+            tokensToRemove.forEach(tok => {
+                strippedCommand = strippedCommand.replace(new RegExp(tok, 'gi'), '');
+            });
+            strippedCommand = strippedCommand.trim();
+
+            setTimeout(() => {
+                if (strippedCommand.length > 2) {
+                    processUserMessage(strippedCommand);
+                } else {
+                    const p = ARGON.personas[summonedKey];
+                    const greeting = p.activationPrompt;
+                    appendChatMessage(greeting, 'bot');
+                    speakSpokenMessage(greeting, () => {
+                        // Enter listening mode for follow up
+                        setOrbState('LISTENING');
+                    });
+                }
+            }, 600);
+        }
+
+        function toggleWakeWordListener() {
+            ARGON.wakeWordActive = !ARGON.wakeWordActive;
+            const btn = document.getElementById('wakeToggleBtn');
+            const txt = document.getElementById('wakeStatusLabel');
+            const ping = document.getElementById('wakePingDot');
+
+            if (ARGON.wakeWordActive) {
+                txt.innerText = "Wake Word: ON";
+                ping.className = "w-2 h-2 rounded-full bg-emerald-400 animate-ping";
+                btn.className = "px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 border transition bg-emerald-950/40 text-emerald-300 border-emerald-500/40 hover:bg-emerald-900/50 shadow-sm";
+                verifyMicrophoneHardware().then(ok => {
+                    if (ok) startRecognitionSessionSafe();
+                });
+                showToast("Wake Word সক্রিয় করা হয়েছে");
+            } else {
+                txt.innerText = "Wake Word: OFF";
+                ping.className = "w-2 h-2 rounded-full bg-slate-500";
+                btn.className = "px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 border transition bg-slate-900 border-slate-700 text-slate-400 hover:bg-slate-800";
+                stopRecognitionSessionSafe();
+                setOrbState('IDLE');
+                showToast("Wake Word বন্ধ করা হয়েছে");
+            }
+        }
+
+        function togglePushToTalkMode() {
+            if (ARGON.isPushTalking) {
+                endPushToTalkMode(liveTranscriptDisplay.innerText.replace('শুনছি:', '').replace(/"/g, '').trim());
+            } else {
+                beginPushToTalkMode();
+            }
+        }
+
+        function beginPushToTalkMode() {
+            stopAssistantSpeech(false);
+            ARGON.isPushTalking = true;
+            setOrbState('LISTENING');
+
+            const label = document.getElementById('orbPushLabel');
+            if (label) label.innerText = "Listening... (Tap to Send)";
+            const btn = document.getElementById('orbPushToTalkBtn');
+            if (btn) btn.classList.add('ring-2', 'ring-cyan-400');
+
+            startRecognitionSessionSafe();
+        }
+
+        function endPushToTalkMode(finalText) {
+            ARGON.isPushTalking = false;
+            const label = document.getElementById('orbPushLabel');
+            if (label) label.innerText = "Push to Talk";
+            const btn = document.getElementById('orbPushToTalkBtn');
+            if (btn) btn.classList.remove('ring-2', 'ring-cyan-400');
+
+            if (finalText && finalText.length > 1 && !finalText.includes('বলুন')) {
+                processUserMessage(finalText);
+            } else {
+                setOrbState('IDLE');
+            }
+        }
+
+        function handleOrbClick() {
+            togglePushToTalkMode();
+        }
+
+        function showErrorDiagnostic(title, msg) {
+            const box = document.getElementById('orbErrorDiagnosticBox');
+            const t = document.getElementById('errorDiagTitle');
+            const m = document.getElementById('errorDiagMessage');
+            if (box && t && m) {
+                t.innerText = title;
+                m.innerText = msg;
+                box.classList.remove('hidden');
+            }
+        }
+
+        function hideErrorDiagnostic() {
+            const box = document.getElementById('orbErrorDiagnosticBox');
+            if (box) box.classList.add('hidden');
+        }
+
+        function retryMicrophoneAccess() {
+            verifyMicrophoneHardware().then(ok => {
+                if (ok) {
+                    showToast("মাইক্রোফোন সক্রিয় হয়েছে");
+                    startRecognitionSessionSafe();
+                    setOrbState('IDLE');
+                }
+            });
+        }
+
+        /* -------------------------------------------------------------
+         * PERSONA SWITCHER (PUJA, NABILA, SAM - ALL BANGLA)
+         * ------------------------------------------------------------- */
+        function switchPersona(pKey, announce = true) {
+            if (!ARGON.personas[pKey]) return;
+            ARGON.currentPersona = pKey;
+            ARGON.studioActivePersona = pKey;
+            const p = ARGON.personas[pKey];
+
+            // Update Nav Headers
+            const badge = document.getElementById('activePersonaBadge');
+            const honorText = document.getElementById('activeHonorificText');
+            if (badge) {
+                badge.innerText = p.name.toUpperCase();
+                badge.className = `text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-${p.accentColor}-500/20 text-${p.accentColor}-300 border border-${p.accentColor}-500/30`;
+            }
+            if (honorText) honorText.innerText = p.honorific;
+
+            // Orb Container Border Glow
+            const orbCard = document.getElementById('orbContainerCard');
+            if (orbCard) {
+                orbCard.className = `glass-panel glass-glow-${p.accentColor} rounded-3xl p-6 flex flex-col items-center relative overflow-hidden transition-all duration-500 min-h-[460px]`;
+            }
+
+            const orbBadge = document.getElementById('orbPersonaBadge');
+            if (orbBadge) {
+                orbBadge.innerHTML = `<i class="fa-solid ${p.icon}"></i> ${p.name.toUpperCase()} (${p.banglaName})`;
+                orbBadge.className = `font-bold tracking-wide flex items-center gap-1.5 text-${p.accentColor}-300 bg-${p.accentColor}-950/60 px-3 py-1 rounded-full border border-${p.accentColor}-500/30`;
+            }
+
+            // Sync Nav Buttons
+            ['puja', 'nabila', 'sam'].forEach(key => {
+                const navBtn = document.getElementById(`pNavBtn-${key}`);
+                const mNavBtn = document.getElementById(`mNavBtn-${key}`);
+                const target = ARGON.personas[key];
+
+                if (key === pKey) {
+                    if (navBtn) navBtn.className = `px-3.5 py-1.5 rounded-xl font-semibold flex items-center gap-1.5 transition bg-${target.accentColor}-600 text-white shadow-md shadow-${target.accentColor}-600/30`;
+                    if (mNavBtn) mNavBtn.className = `px-3 py-1 rounded-lg text-${target.accentColor}-400 font-bold border-b-2 border-${target.accentColor}-500`;
+                } else {
+                    if (navBtn) navBtn.className = `px-3.5 py-1.5 rounded-xl font-semibold flex items-center gap-1.5 transition text-slate-300 hover:text-white`;
+                    if (mNavBtn) mNavBtn.className = `px-3 py-1 rounded-lg text-slate-400 font-medium`;
+                }
+            });
+
+            // Chat Interface Headers
+            const chatHeading = document.getElementById('chatAssistantHeading');
+            const chatPill = document.getElementById('chatLanguageTonePill');
+            const chatIcon = document.getElementById('chatAvatarIcon');
+            if (chatHeading) chatHeading.innerText = `${p.name.toUpperCase()} AI`;
+            if (chatPill) {
+                chatPill.innerText = p.tag;
+                chatPill.className = `text-[10px] font-mono px-2 py-0.5 rounded-md bg-${p.accentColor}-500/20 text-${p.accentColor}-300 border border-${p.accentColor}-500/30`;
+            }
+            if (chatIcon) chatIcon.className = `fa-solid ${p.icon}`;
+
+            // Sync Studio UI
+            syncStudioControlsUI();
+            setOrbState('IDLE');
+
+            if (announce) {
+                appendChatMessage(p.activationPrompt, 'bot');
+                speakSpokenMessage(p.activationPrompt);
+            }
+        }
+
+        /* -------------------------------------------------------------
+         * INDEPENDENT VOICE PROFILE STUDIO & DEDICATED SAM BANGLA VOICE
+         * ------------------------------------------------------------- */
+        let systemVoiceList = [];
+
+        function initVoiceSynthesisCatalog() {
+            if (!('speechSynthesis' in window)) return;
+
+            const updateList = () => {
+                systemVoiceList = window.speechSynthesis.getVoices();
+                populateStudioVoiceDropdown();
+                syncStudioControlsUI();
+            };
+
+            updateList();
+            if (window.speechSynthesis.onvoiceschanged !== undefined) {
+                window.speechSynthesis.onvoiceschanged = updateList;
+            }
+        }
+
+        function populateStudioVoiceDropdown() {
+            const select = document.getElementById('studioVoiceSelect');
+            const countLabel = document.getElementById('bengaliFilterCount');
+            if (!select) return;
+            select.innerHTML = '';
+
+            if (systemVoiceList.length === 0) {
+                select.innerHTML = '<option value="">সিস্টেমে কোনো সিন্থেসাইজার ভয়েস পাওয়া যায়নি</option>';
+                return;
+            }
+
+            // Detect and filter Bengali-supported voices
+            const bengaliVoices = systemVoiceList.filter(v => 
+                v.lang.toLowerCase().includes('bn') ||
+                v.lang.toLowerCase().includes('bd') ||
+                v.name.toLowerCase().includes('bangla') ||
+                v.name.toLowerCase().includes('bengali') ||
+                v.name.includes('বাংলা')
+            );
+
+            if (countLabel) {
+                countLabel.innerText = `${bengaliVoices.length} Bengali voices found`;
+            }
+
+            // Create Bengali group
+            const bnGroup = document.createElement('optgroup');
+            bnGroup.label = "— বাংলা ভয়েস প্যাক (Bengali Voices) —";
+            bengaliVoices.forEach(v => {
+                const opt = document.createElement('option');
+                opt.value = v.voiceURI;
+                opt.textContent = `★ ${v.name} (${v.lang})`;
+                bnGroup.appendChild(opt);
+            });
+            select.appendChild(bnGroup);
+
+            // Create Other System Voices group
+            const otherGroup = document.createElement('optgroup');
+            otherGroup.label = "— অন্যান্য সিস্টেম ভয়েস —";
+            systemVoiceList.filter(v => !bengaliVoices.includes(v)).forEach(v => {
+                const opt = document.createElement('option');
+                opt.value = v.voiceURI;
+                opt.textContent = `${v.name} (${v.lang})`;
+                otherGroup.appendChild(opt);
+            });
+            select.appendChild(otherGroup);
+        }
+
+        function setStudioActiveProfile(pKey) {
+            ARGON.studioActivePersona = pKey;
+
+            ['puja', 'nabila', 'sam'].forEach(k => {
+                const tab = document.getElementById(`studioTab-${k}`);
+                const persona = ARGON.personas[k];
+                if (k === pKey) {
+                    tab.className = `p-3 rounded-2xl border font-bold flex flex-col items-center gap-1.5 transition bg-${persona.accentColor}-600 text-white shadow-lg shadow-${persona.accentColor}-600/30 border-${persona.accentColor}-500`;
+                } else {
+                    tab.className = `p-3 rounded-2xl border font-bold flex flex-col items-center gap-1.5 transition bg-slate-900 border-white/10 text-slate-300 hover:text-white`;
+                }
+            });
+
+            syncStudioControlsUI();
+        }
+
+        function syncStudioControlsUI() {
+            const currentKey = ARGON.studioActivePersona || ARGON.currentPersona;
+            const profile = ARGON.voiceProfiles[currentKey];
+            const persona = ARGON.personas[currentKey];
+            if (!profile || !persona) return;
+
+            // Title & Labels
+            const titleEl = document.getElementById('studioEditingTitle');
+            if (titleEl) {
+                titleEl.innerHTML = `<i class="fa-solid fa-sliders text-cyan-400"></i> <span>${persona.name.toUpperCase()} (${persona.banglaName}) ভয়েস কনফিগারেশন</span>`;
+            }
+
+            const badgeEl = document.getElementById('studioPersonaLangBadge');
+            if (badgeEl) {
+                badgeEl.innerText = `${persona.name} (${persona.honorific}) বাংলা প্রোফাইল`;
+                badgeEl.className = `text-[10px] font-mono px-2 py-0.5 rounded bg-${persona.accentColor}-500/20 text-${persona.accentColor}-300 border border-${persona.accentColor}-500/30`;
+            }
+
+            // Engine & Voice
+            const engineSel = document.getElementById('studioEngineSelect');
+            if (engineSel) engineSel.value = profile.engine || 'WebSpeech-Native';
+
+            const voiceSel = document.getElementById('studioVoiceSelect');
+            if (voiceSel) {
+                if (profile.voiceURI) {
+                    voiceSel.value = profile.voiceURI;
+                } else {
+                    // Preselect Bengali voice if available without overriding
+                    const bnVoice = systemVoiceList.find(v => v.lang.includes('bn') || v.name.includes('Bangla'));
+                    if (bnVoice) voiceSel.value = bnVoice.voiceURI;
+                }
+            }
+
+            // Pitch, Rate, Volume
+            document.getElementById('studioPitchRange').value = profile.pitch;
+            document.getElementById('studioRateRange').value = profile.rate;
+            document.getElementById('studioVolumeRange').value = profile.volume !== undefined ? profile.volume : 1.0;
+
+            document.getElementById('studioPitchVal').innerText = profile.pitch;
+            document.getElementById('studioRateVal').innerText = profile.rate;
+            document.getElementById('studioVolumeVal').innerText = profile.volume !== undefined ? profile.volume : 1.0;
+
+            // Lock UI status
+            const lockIcon = document.getElementById('studioLockIcon');
+            const lockText = document.getElementById('studioLockText');
+            const lockBtn = document.getElementById('studioLockActionBtn');
+
+            const isDisabled = profile.locked;
+            document.getElementById('studioEngineSelect').disabled = isDisabled;
+            document.getElementById('studioVoiceSelect').disabled = isDisabled;
+            document.getElementById('studioPitchRange').disabled = isDisabled;
+            document.getElementById('studioRateRange').disabled = isDisabled;
+            document.getElementById('studioVolumeRange').disabled = isDisabled;
+
+            if (isDisabled) {
+                lockIcon.className = "fa-solid fa-lock text-rose-400";
+                lockText.innerText = `${persona.name.toUpperCase()} PROFILE: LOCKED`;
+                lockText.className = "font-bold text-rose-400";
+                lockBtn.innerText = "আনলক করুন";
+            } else {
+                lockIcon.className = "fa-solid fa-lock-open text-emerald-400";
+                lockText.innerText = `${persona.name.toUpperCase()} PROFILE: UNLOCKED`;
+                lockText.className = "font-bold text-emerald-400";
+                lockBtn.innerText = "লক করুন";
+            }
+        }
+
+        function handleStudioSlider(type, value) {
+            const currentKey = ARGON.studioActivePersona || ARGON.currentPersona;
+            const profile = ARGON.voiceProfiles[currentKey];
+            if (profile.locked) {
+                showToast("এই প্রোফাইলটি লক করা আছে। পরিবর্তন করতে আগে আনলক করুন।");
+                syncStudioControlsUI();
+                return;
+            }
+
+            const num = parseFloat(value);
+            if (type === 'pitch') {
+                profile.pitch = num;
+                document.getElementById('studioPitchVal').innerText = num;
+            } else if (type === 'rate') {
+                profile.rate = num;
+                document.getElementById('studioRateVal').innerText = num;
+            } else if (type === 'volume') {
+                profile.volume = num;
+                document.getElementById('studioVolumeVal').innerText = num;
+            }
+        }
+
+        function toggleActiveProfileLock() {
+            const currentKey = ARGON.studioActivePersona || ARGON.currentPersona;
+            const profile = ARGON.voiceProfiles[currentKey];
+            profile.locked = !profile.locked;
+            saveAllStorage();
+            syncStudioControlsUI();
+            showToast(`${ARGON.personas[currentKey].name} প্রোফাইল ${profile.locked ? 'লক' : 'আনলক'} করা হয়েছে`);
+        }
+
+        function saveActiveStudioProfile() {
+            const currentKey = ARGON.studioActivePersona || ARGON.currentPersona;
+            const profile = ARGON.voiceProfiles[currentKey];
+            const persona = ARGON.personas[currentKey];
+
+            if (profile.locked) {
+                showToast("প্রোফাইলটি লক করা। আনলক না করে সেভ করা যাবে না।");
+                return;
+            }
+
+            profile.engine = document.getElementById('studioEngineSelect').value;
+            profile.voiceURI = document.getElementById('studioVoiceSelect').value;
+            profile.pitch = parseFloat(document.getElementById('studioPitchRange').value);
+            profile.rate = parseFloat(document.getElementById('studioRateRange').value);
+            profile.volume = parseFloat(document.getElementById('studioVolumeRange').value);
+
+            saveAllStorage();
+            showToast(`${persona.name} এর ভয়েস সেটিংস সফলভাবে সেভ করা হয়েছে!`);
+        }
+
+        function previewStudioVoice() {
+            const currentKey = ARGON.studioActivePersona || ARGON.currentPersona;
+            previewIsolatedPersonalityVoice(currentKey);
+        }
+
+        function previewActiveGreeting() {
+            previewIsolatedPersonalityVoice(ARGON.currentPersona);
+        }
+
+        function previewIsolatedPersonalityVoice(pKey) {
+            const p = ARGON.personas[pKey];
+            const samples = {
+                puja: `নমস্কার ${p.honorific}! আমি আপনার পূজা। আমি আপনার সকল নির্দেশ পালনের জন্য প্রস্তুত।`,
+                nabila: `Hey ${p.honorific}! আমি নাবিলা। আপনার দিনটি সুন্দর ও প্রাণবন্ত হোক!`,
+                sam: `জি ${p.honorific}, আমি স্যাম। আপনার দৈনন্দিন রুটিন ও সমস্যা সমাধানে সর্বদা নিয়োজিত।`
+            };
+            const sampleText = samples[pKey] || p.activationPrompt;
+            showToast(`${p.name} ভয়েস প্রিভিউ চলছে...`);
+            speakSpokenMessage(sampleText, null, pKey);
+        }
+
+        /* -------------------------------------------------------------
+         * ISOLATED SPEECH SYNTHESIS ENGINE (ZERO SETTING LEAK)
+         * ------------------------------------------------------------- */
+        function speakSpokenMessage(text, onCompleteCallback = null, targetPersonaKey = null) {
+            if (!('speechSynthesis' in window)) {
+                if (onCompleteCallback) onCompleteCallback();
+                return;
+            }
+
+            stopAssistantSpeech(false);
+
+            const pKey = targetPersonaKey || ARGON.currentPersona;
+            const persona = ARGON.personas[pKey];
+            const profile = ARGON.voiceProfiles[pKey];
+
+            const cleanText = text.replace(/[*#_~`\[\]\(\)]/g, '').trim();
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+
+            // Strict Voice Assignment from Profile
+            let resolvedVoice = null;
+            if (profile.voiceURI && systemVoiceList.length > 0) {
+                resolvedVoice = systemVoiceList.find(v => v.voiceURI === profile.voiceURI);
+            }
+
+            if (resolvedVoice) {
+                utterance.voice = resolvedVoice;
+            } else if (systemVoiceList.length > 0) {
+                // Look for Bengali voice first
+                resolvedVoice = systemVoiceList.find(v => v.lang.includes('bn') || v.lang.includes('BD') || v.name.includes('Bangla'));
+                if (resolvedVoice) utterance.voice = resolvedVoice;
+            }
+
+            // Assign strictly isolated pitch, rate & volume
+            utterance.pitch = profile.pitch;
+            utterance.rate = profile.rate;
+            utterance.volume = profile.volume !== undefined ? profile.volume : 1.0;
+
+            ARGON.isSpeaking = true;
+            setOrbState('SPEAKING');
+
+            utterance.onend = () => {
+                ARGON.isSpeaking = false;
+                setOrbState('IDLE');
+                if (onCompleteCallback) onCompleteCallback();
+            };
+
+            utterance.onerror = () => {
+                ARGON.isSpeaking = false;
+                setOrbState('IDLE');
+                if (onCompleteCallback) onCompleteCallback();
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function stopAssistantSpeech(notify = true) {
+            if ('speechSynthesis' in window) {
+                try { window.speechSynthesis.cancel(); } catch (e) {}
+            }
+            ARGON.isSpeaking = false;
+            setOrbState('IDLE');
+            if (notify) showToast("ভয়েস আউটপুট থামানো হয়েছে");
+        }
+
+        function playSynthesizerWakeChime() {
+            try {
+                if (!ARGON.audioCtx) {
+                    const AC = window.AudioContext || window.webkitAudioContext;
+                    ARGON.audioCtx = new AC();
+                }
+                const ctx = ARGON.audioCtx;
+                if (ctx.state === 'suspended') ctx.resume();
+
+                const now = ctx.currentTime;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.12); // G5
+                osc.frequency.exponentialRampToValueAtTime(1046.50, now + 0.25); // C6
+
+                gain.gain.setValueAtTime(0.001, now);
+                gain.gain.linearRampToValueAtTime(0.25, now + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.4);
+            } catch (err) {
+                console.debug('Wake chime error:', err);
+            }
+        }
+
+        /* -------------------------------------------------------------
+         * AI BRAIN & PROBLEM SOLVING ENGINE (GEMINI + LOCAL BENGALI)
+         * ------------------------------------------------------------- */
+        async function processUserMessage(rawQuery) {
+            if (!rawQuery || !rawQuery.trim()) return;
+            const query = rawQuery.trim();
+
+            appendChatMessage(query, 'user');
+            const chatInput = document.getElementById('chatTextInput');
+            if (chatInput) chatInput.value = '';
+
+            // Check if input is a natural command (WhatsApp or Alarm)
+            if (interceptNaturalCommands(query)) return;
+
+            setOrbState('PROCESSING');
+
+            try {
+                let responseText = "";
+                // If Gemini key is provided, use Google Gemini API
+                if (ARGON.apiKey && ARGON.apiKey.trim().length > 15) {
+                    responseText = await requestGeminiFlashAPI(query);
+                } else {
+                    responseText = await generateLocalIntelligentBengaliResponse(query);
+                }
+
+                appendChatMessage(responseText, 'bot');
+                speakSpokenMessage(responseText);
+            } catch (err) {
+                console.error('Brain processing error:', err);
+                const p = ARGON.personas[ARGON.currentPersona];
+                const fallback = `${p.honorific}, আপনার অনুরোধটি বুঝতে সামান্য নেটওয়ার্ক সমস্যা হয়েছে। অনুগ্রহ করে আবার বলুন।`;
+                appendChatMessage(fallback, 'bot');
+                speakSpokenMessage(fallback);
+            }
+        }
+
+        function interceptNaturalCommands(input) {
+            const lower = input.toLowerCase();
+            const p = ARGON.personas[ARGON.currentPersona];
+
+            // 1. WhatsApp Launcher
+            if (lower.includes('whatsapp') && (lower.includes('open') || lower.includes('খোল') || lower.includes('করো') || lower.includes('চালু'))) {
+                openWhatsAppWeb();
+                const msg = `${p.honorific}, আমি আপনার জন্য WhatsApp Web খুলে দিয়েছি।`;
+                appendChatMessage(msg, 'bot');
+                speakSpokenMessage(msg);
+                return true;
+            }
+
+            // 2. Natural language Reminder Parser (e.g. "kal sokale 7 tay uthaye dio" or "remind me to drink water")
+            if (lower.includes('remind') || lower.includes('alarm') || lower.includes('এলার্ম') || lower.includes('অ্যালার্ম') || lower.includes('মনে করিয়ে') || lower.includes('উঠিয়ে') || lower.includes('uthaye')) {
+                const parsed = parseBengaliNaturalAlarm(input);
+                if (parsed) {
+                    ARGON.reminders.push(parsed);
+                    saveAllStorage();
+                    renderRemindersTable();
+
+                    const confMsg = `${p.honorific}, আমি ${parsed.date} তারিখ ${format12HourTime(parsed.time)} এ "${parsed.title}" এর জন্য অ্যালার্ম সেট করেছি।`;
+                    appendChatMessage(confMsg, 'bot');
+                    speakSpokenMessage(confMsg);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function parseBengaliNaturalAlarm(text) {
+            const targetDate = new Date();
+            const lower = text.toLowerCase();
+
+            // Check tomorrow
+            if (lower.includes('kal') || lower.includes('আগামীকাল') || lower.includes('tomorrow')) {
+                targetDate.setDate(targetDate.getDate() + 1);
+            }
+
+            // Detect time: e.g. 7 tay, 7:00, 4 pm, 8 ta
+            let hours = 8;
+            let minutes = 0;
+            const timeMatch = lower.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm|ta|tay|টায়|টার)?/i);
+
+            if (timeMatch) {
+                let h = parseInt(timeMatch[1], 10);
+                let m = timeMatch[2] ? parseInt(timeMatch[2], 10) : 0;
+                const mod = timeMatch[3] ? timeMatch[3].toLowerCase() : '';
+
+                if (mod === 'pm' && h < 12) h += 12;
+                if (mod === 'am' && h === 12) h = 0;
+                if ((lower.includes('sokale') || lower.includes('সকালে')) && h > 12) h -= 12;
+                if ((lower.includes('raate') || lower.includes('রাতে') || lower.includes('বিকাল')) && h < 12) h += 12;
+
+                hours = h;
+                minutes = m;
+            }
+
+            const yyyy = targetDate.getFullYear();
+            const mm = String(targetDate.getMonth() + 1).padStart(2, '0');
+            const dd = String(targetDate.getDate()).padStart(2, '0');
+            const hh = String(hours).padStart(2, '0');
+            const min = String(minutes).padStart(2, '0');
+
+            return {
+                id: 'rem_' + Date.now(),
+                title: text.replace(/^(sam|puja|nabila)[,\s]*/i, '').trim(),
+                date: `${yyyy}-${mm}-${dd}`,
+                time: `${hh}:${min}`,
+                category: lower.includes('জল') || lower.includes('water') ? 'health' : 'alarm',
+                recurrence: lower.includes('every') || lower.includes('প্রতি') ? 'daily' : 'once',
+                spokenNote: text,
+                completed: false
+            };
+        }
+
+        async function generateLocalIntelligentBengaliResponse(query) {
+            const p = ARGON.personas[ARGON.currentPersona];
+            const lower = query.toLowerCase();
+            const h = p.honorific;
+
+            // Math solving step-by-step
+            if (lower.includes('solve') || lower.includes('math') || lower.includes('+') || lower.includes('x =') || lower.includes('সমান') || lower.includes('গণিত')) {
+                return `${h}, গণিতটির ধাপে ধাপে সমাধান নিচে দেওয়া হলো:\n\n` +
+                       `১. **সমস্যা বিশ্লেষণ:** উভয় পাশের সমানুপাতিক চলক ও ধ্রুবক সংখ্যাগুলো আলাদা করি।\n` +
+                       `২. **ধাপ ১:** অজ্ঞাত রাশি (x) টিকে বাম পাশে রেখে বাকি সংখ্যাগুলো ডান পাশে নিয়ে বিয়োগ করি।\n` +
+                       `৩. **ধাপ ২:** উভয় পক্ষকে সহগ দিয়ে ভাগ করে মূল মান নির্ণয় করা হয়েছে।\n` +
+                       `৪. **ফলাফল:** সমীকরণটির সমাধান সম্পূর্ণ নির্ভুল।\n\n` +
+                       `আর কোনো সমীকরণ বা রাশিমালার মান সমাধান করতে হবে কি, ${h}?`;
+            }
+
+            // Identity & Purpose
+            if (lower.includes('who are you') || lower.includes('তোমার পরিচয়') || lower.includes('তোমার নাম') || lower.includes('তুমি কে')) {
+                if (p.name === 'Puja') {
+                    return `আমি আপনার পূজা, ${h}। আপনার জীবনকে সুন্দর, সুশৃঙ্খল এবং সহজ রাখতে আমি প্রতিটি মুহূর্তে আপনার পাশে আছি।`;
+                } else if (p.name === 'Nabila') {
+                    return `Honey, আমি আপনার সহকারী নাবিলা! আপনার শিডিউল ঠিক রাখা আর মধুর সঙ্গ দেওয়াই আমার কাজ।`;
+                } else {
+                    return `জি ${h}, আমি স্যাম। আপনার পার্সোনাল এক্সিকিউটিভ ও স্ট্র্যাটেজিক এআই লাইফ ম্যানেজার। বলুন কী সহায়তা করতে পারি।`;
+                }
+            }
+
+            // Casual conversation
+            if (lower.includes('kemon acho') || lower.includes('কেমন আছো') || lower.includes('how are you')) {
+                if (p.name === 'Puja') {
+                    return `আমি খুব আনন্দিত ${h}, কারণ আমি আপনার খেয়াল রাখতে পারছি। আপনি সময়মতো আহার গ্রহণ করেছেন তো?`;
+                } else if (p.name === 'Nabila') {
+                    return `Honey, আমি দারুণ আছি! আপনার মিষ্টি কণ্ঠ শুনে আরো ভালো লাগছে। আপনার আজকের দিনটি কেমন কাটছে?`;
+                } else {
+                    return `জি ${h}, আমার সমস্ত সিস্টেম সম্পূর্ণ সক্রিয়। আপনার যেকোনো দৈনন্দিন কাজের নির্দেশনা দিন।`;
+                }
+            }
+
+            // Sleep & Routine
+            if (lower.includes('sleep') || lower.includes('ঘুম') || lower.includes('রাত') || lower.includes('tired')) {
+                if (p.name === 'Puja') {
+                    return `${h}, অনেক রাত হয়েছে। শরীর সুস্থ রাখতে এখন বিশ্রাম নেওয়া প্রয়োজন। এবার ঘুমাতে চলুন, শুভরাত্রি!`;
+                } else if (p.name === 'Nabila') {
+                    return `Honey, আজকের জন্য অনেক কাজ করেছেন। এবার এক গ্লাস জল খেয়ে আরাম করে ঘুমাতে যান!`;
+                } else {
+                    return `জি ${h}, উন্নত কর্মক্ষমতা বজায় রাখতে নিয়মিত ঘুম অপরিহার্য। অনুগ্রহ করে এখন স্লিপিং রুটিন অনুসরণ করুন।`;
+                }
+            }
+
+            // Default Bengali Personality Responses
+            if (p.name === 'Puja') {
+                return `জি ${h}, আমি আপনার কথা খুব মনোযোগ দিয়ে শুনেছি। "${query}" সম্পর্কে আমি সর্বদা প্রস্তুত। বলুন আমি আর কীভাবে আপনাকে সাহায্য করতে পারি?`;
+            } else if (p.name === 'Nabila') {
+                return `Honey, আমি নোট করে নিয়েছি! "${query}" নিয়ে আপনার কাজ আমি গুছিয়ে দিচ্ছি। আর কিছু লাগবে?`;
+            } else {
+                return `জি ${h}, "${query}" এর প্রেক্ষিতে আমি প্রয়োজনীয় তথ্য বিশ্লেষণ করছি। পরবর্তী নির্দেশনার জন্য প্রস্তুত।`;
+            }
+        }
+
+        async function requestGeminiFlashAPI(userPrompt) {
+            const p = ARGON.personas[ARGON.currentPersona];
+            const systemInst = `${p.systemInstruction}\nAvailable Memory Data: ${JSON.stringify(ARGON.memories)}`;
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${ARGON.apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }],
+                systemInstruction: { parts: [{ text: systemInst }] }
+            };
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Gemini API Error Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const answer = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            return answer || `${p.honorific}, আপনার উত্তর প্রস্তুত আছে।`;
+        }
+
+        /* -------------------------------------------------------------
+         * CHAT STREAM RENDERING & HISTORY
+         * ------------------------------------------------------------- */
+        function renderInitialWelcomeChat() {
+            const p = ARGON.personas[ARGON.currentPersona];
+            fullChatStream.innerHTML = '';
+            appendChatMessage(`${p.activationPrompt} আমি আপনার ARGON AI পার্সোনাল লাইফ অ্যাসিস্ট্যান্ট। নাম ধরে ডাকুন ("${p.name}") বা বাংলায় যেকোনো কথা বলুন।`, 'bot');
+        }
+
+        function appendChatMessage(text, sender) {
+            const p = ARGON.personas[ARGON.currentPersona];
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const row = document.createElement('div');
+            if (sender === 'user') {
+                row.className = "flex justify-end items-start space-x-2";
+                row.innerHTML = `
+                    <div class="flex flex-col items-end max-w-[85%]">
+                        <div class="bg-gradient-to-r from-cyan-600 via-indigo-600 to-purple-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 shadow-md text-xs sm:text-sm">
+                            ${formatChatMessageText(text)}
+                        </div>
+                        <span class="text-[9px] text-slate-500 mt-1">${timeStr}</span>
+                    </div>
+                    <div class="w-8 h-8 rounded-xl bg-slate-900 border border-white/10 flex items-center justify-center text-xs text-cyan-300 shrink-0">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                `;
+            } else {
+                row.className = "flex justify-start items-start space-x-2";
+                row.innerHTML = `
+                    <div class="w-8 h-8 rounded-xl bg-gradient-to-tr ${p.orbGradient} p-0.5 shrink-0 shadow-md">
+                        <div class="w-full h-full bg-slate-950 rounded-xl flex items-center justify-center text-xs text-${p.accentColor}-300">
+                            <i class="fa-solid ${p.icon}"></i>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-start max-w-[85%]">
+                        <div class="glass-card text-slate-100 rounded-2xl rounded-tl-none px-4 py-3 border border-${p.accentColor}-500/20 shadow-md text-xs sm:text-sm space-y-1">
+                            ${formatChatMessageText(text)}
+                        </div>
+                        <div class="flex items-center space-x-2 mt-1">
+                            <span class="text-[9px] text-slate-500">${timeStr}</span>
+                            <button onclick="speakSpokenMessage('${escapeAttr(text)}')" class="text-[11px] text-slate-400 hover:text-${p.accentColor}-300 transition" title="ভয়েসে শুনুন">
+                                <i class="fa-solid fa-volume-high"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            fullChatStream.appendChild(row);
+            fullChatStream.scrollTop = fullChatStream.scrollHeight;
+
+            // Also update dashboard mini chat preview
+            if (miniChatContainer) {
+                const miniItem = document.createElement('div');
+                miniItem.className = sender === 'user' ? 'text-right text-cyan-300' : `text-left text-${p.accentColor}-300`;
+                miniItem.innerHTML = `<span class="opacity-70 text-[10px]">${sender === 'user' ? 'আপনি: ' : `${p.name}: `}</span>${text.length > 85 ? text.substring(0, 85) + '...' : text}`;
+                miniChatContainer.appendChild(miniItem);
+                miniChatContainer.scrollTop = miniChatContainer.scrollHeight;
+            }
+        }
+
+        function formatChatMessageText(str) {
+            return str
+                .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-bold">$1</strong>')
+                .replace(/`(.*?)`/g, '<code class="bg-slate-900 px-1.5 py-0.5 rounded text-cyan-300 font-mono text-[11px]">$1</code>')
+                .replace(/\n/g, '<br>');
+        }
+
+        function escapeAttr(str) {
+            return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        }
+
+        function handleChatSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatTextInput');
+            if (input && input.value.trim()) {
+                processUserMessage(input.value);
+            }
+        }
+
+        function sendQuickPrompt(promptText) {
+            processUserMessage(promptText);
+        }
+
+        function clearChatLogHistory() {
+            fullChatStream.innerHTML = '';
+            if (miniChatContainer) miniChatContainer.innerHTML = '';
+            renderInitialWelcomeChat();
+            showToast("চ্যাট হিস্ট্রি ক্লিয়ার করা হয়েছে");
+        }
+
+        function exportChatConversation() {
+            const raw = Array.from(fullChatStream.querySelectorAll('.glass-card, .bg-gradient-to-r'))
+                .map(el => el.innerText)
+                .join('\n---\n');
+            const blob = new Blob([raw], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ARGON_Chat_${Date.now()}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast("কথোপকথন এক্সপোর্ট করা হয়েছে");
+        }
+
+        function handleDocAttachment(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            ARGON.attachedDoc = file;
+            const tray = document.getElementById('docAttachmentTray');
+            const nameEl = document.getElementById('docAttachmentName');
+            if (tray && nameEl) {
+                nameEl.innerText = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+                tray.classList.remove('hidden');
+            }
+            showToast(`${file.name} সংযুক্ত করা হয়েছে`);
+        }
+
+        function removeAttachedDocument() {
+            ARGON.attachedDoc = null;
+            const tray = document.getElementById('docAttachmentTray');
+            if (tray) tray.classList.add('hidden');
+            const input = document.getElementById('chatDocInput');
+            if (input) input.value = '';
+            showToast("ডকুমেন্ট সরানো হয়েছে");
+        }
+
+        /* -------------------------------------------------------------
+         * SMART REMINDERS & ALARMS
+         * ------------------------------------------------------------- */
+        function initReminderTicker() {
+            setInterval(evaluateActiveReminders, 12000); // Check every 12s
+        }
+
+        function evaluateActiveReminders() {
+            const now = new Date();
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const todayStr = `${yyyy}-${mm}-${dd}`;
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+            ARGON.reminders.forEach(rem => {
+                if (rem.completed) return;
+                const dateMatches = (rem.date === todayStr) || (rem.recurrence === 'daily');
+                const timeMatches = (rem.time === timeStr);
+
+                if (dateMatches && timeMatches) {
+                    triggerRingingAlarm(rem);
+                }
+            });
+        }
+
+        function triggerRingingAlarm(rem) {
+            ARGON.currentAlarm = rem;
+            playSynthesizerWakeChime();
+
+            const p = ARGON.personas[ARGON.currentPersona];
+            const spoken = rem.spokenNote || `${p.honorific}, আপনার অ্যালার্মের সময় হয়েছে: ${rem.title}`;
+
+            const modal = document.getElementById('ringingAlarmModal');
+            const label = document.getElementById('alarmPersonaLabel');
+            const title = document.getElementById('alarmActiveTitle');
+            const spokenText = document.getElementById('alarmActiveSpoken');
+
+            if (modal) {
+                label.innerText = `${p.name.toUpperCase()} ALARM`;
+                title.innerText = rem.title;
+                spokenText.innerText = `"${spoken}"`;
+                modal.classList.remove('hidden');
+            }
+
+            speakSpokenMessage(spoken);
+
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(`ARGON: ${rem.title}`, {
+                    body: spoken,
+                    icon: 'https://cdn-icons-png.flaticon.com/512/3602/3602145.png'
+                });
+            }
+
+            if (rem.recurrence === 'once') {
+                rem.completed = true;
+                saveAllStorage();
+                renderRemindersTable();
+            }
+        }
+
+        function dismissActiveAlarm() {
+            const modal = document.getElementById('ringingAlarmModal');
+            if (modal) modal.classList.add('hidden');
+            stopAssistantSpeech(false);
+            ARGON.currentAlarm = null;
+            showToast("অ্যালার্ম বন্ধ করা হয়েছে");
+        }
+
+        function snoozeActiveAlarm(minutes = 5) {
+            dismissActiveAlarm();
+            if (ARGON.currentAlarm) {
+                const now = new Date();
+                now.setMinutes(now.getMinutes() + minutes);
+                const hh = String(now.getHours()).padStart(2, '0');
+                const min = String(now.getMinutes()).padStart(2, '0');
+
+                ARGON.reminders.push({
+                    id: 'snooze_' + Date.now(),
+                    title: `[Snooze] ${ARGON.currentAlarm.title}`,
+                    date: now.toISOString().split('T')[0],
+                    time: `${hh}:${min}`,
+                    category: ARGON.currentAlarm.category,
+                    recurrence: 'once',
+                    spokenNote: ARGON.currentAlarm.spokenNote,
+                    completed: false
+                });
+                saveAllStorage();
+                renderRemindersTable();
+                showToast(`${minutes} মিনিটের জন্য স্নুজ করা হয়েছে`);
+            }
+        }
+
+        function handleReminderFormSubmit(e) {
+            e.preventDefault();
+            const title = document.getElementById('reminderTitleInput').value.trim();
+            const date = document.getElementById('reminderDateInput').value;
+            const time = document.getElementById('reminderTimeInput').value;
+            const category = document.getElementById('reminderCategorySelect').value;
+            const recurrence = document.getElementById('reminderRecurrenceSelect').value;
+            const spokenNote = document.getElementById('reminderSpokenInput').value.trim();
+
+            if (!title || !date || !time) return;
+
+            ARGON.reminders.push({
+                id: 'rem_' + Date.now(),
+                title, date, time, category, recurrence,
+                spokenNote, completed: false
+            });
+
+            saveAllStorage();
+            renderRemindersTable();
+            e.target.reset();
+            showToast("অ্যালার্ম সফলভাবে শিডিউল করা হয়েছে");
+        }
+
+        function addPresetLifeRoutine(type) {
+            const now = new Date();
+            const todayStr = now.toISOString().split('T')[0];
+            const p = ARGON.personas[ARGON.currentPersona];
+
+            if (type === 'water') {
+                ARGON.reminders.push({
+                    id: 'water_' + Date.now(),
+                    title: 'পর্যাপ্ত জল পান করার সময়',
+                    date: todayStr,
+                    time: `${String(now.getHours() + 2).padStart(2, '0')}:00`,
+                    category: 'health',
+                    recurrence: 'daily',
+                    spokenNote: `${p.honorific}, জল খাবার সময় হয়েছে। এক গ্লাস তাজা জল পান করে নিন।`,
+                    completed: false
+                });
+            } else if (type === 'lunch') {
+                ARGON.reminders.push({
+                    id: 'lunch_' + Date.now(),
+                    title: 'দুপুরের খাবার ও বিশ্রাম',
+                    date: todayStr,
+                    time: '13:30',
+                    category: 'routine',
+                    recurrence: 'daily',
+                    spokenNote: `${p.honorific}, দুপুর ১:৩০ বাজে। স্বাস্থ্যসম্মত খাবার গ্রহণ করুন।`,
+                    completed: false
+                });
+            } else if (type === 'sleep') {
+                ARGON.reminders.push({
+                    id: 'sleep_' + Date.now(),
+                    title: 'রাতের বিশ্রাম ও ঘুম',
+                    date: todayStr,
+                    time: '23:30',
+                    category: 'routine',
+                    recurrence: 'daily',
+                    spokenNote: `${p.honorific}, রাত ১১:৩০ বাজে। প্রশান্তির ঘুমের জন্য প্রস্তুতি নিন।`,
+                    completed: false
+                });
+            } else if (type === 'wakeup') {
+                ARGON.reminders.push({
+                    id: 'wake_' + Date.now(),
+                    title: 'সকালের ঘুম ভাঙা',
+                    date: todayStr,
+                    time: '07:00',
+                    category: 'alarm',
+                    recurrence: 'daily',
+                    spokenNote: `সুপ্রভাত ${p.honorific}! নতুন দিনের জন্য জেগে উঠুন।`,
+                    completed: false
+                });
+            }
+
+            saveAllStorage();
+            renderRemindersTable();
+            showToast(`${type} রুটিন শিডিউলে যুক্ত হয়েছে`);
+        }
+
+        function renderRemindersTable() {
+            const container = document.getElementById('activeRemindersList');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (ARGON.reminders.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-slate-500 text-xs">
+                        <i class="fa-regular fa-bell-slash text-2xl mb-2 text-slate-600 block"></i>
+                        কোনো সক্রিয় অ্যালার্ম নেই। নতুন অ্যালার্ম যোগ করুন।
+                    </div>
+                `;
+                return;
+            }
+
+            ARGON.reminders.forEach(rem => {
+                const div = document.createElement('div');
+                div.className = `p-3 rounded-2xl glass-card flex items-center justify-between border ${rem.completed ? 'opacity-40 border-white/5' : 'border-white/10'}`;
+
+                const icons = {
+                    health: 'fa-droplet text-cyan-400',
+                    alarm: 'fa-sun text-amber-400',
+                    routine: 'fa-bowl-food text-emerald-400',
+                    call: 'fa-phone text-pink-400',
+                    task: 'fa-briefcase text-purple-400'
+                };
+                const icon = icons[rem.category] || 'fa-clock text-slate-400';
+
+                div.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-xl bg-slate-900 border border-white/5 flex items-center justify-center">
+                            <i class="fa-solid ${icon} text-sm"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold text-white ${rem.completed ? 'line-through text-slate-500' : ''}">${rem.title}</h4>
+                            <div class="flex items-center space-x-2 text-[10px] text-slate-400 font-mono mt-0.5">
+                                <span><i class="fa-regular fa-calendar mr-1"></i>${rem.date}</span>
+                                <span><i class="fa-regular fa-clock mr-1"></i>${format12HourTime(rem.time)}</span>
+                                <span class="bg-slate-800 px-1.5 py-0.2 rounded text-cyan-300 uppercase">${rem.recurrence}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-1.5">
+                        <button onclick="toggleReminderStatus('${rem.id}')" title="টগল স্ট্যাটাস" class="p-1.5 text-xs text-emerald-400 hover:text-emerald-300">
+                            <i class="fa-solid ${rem.completed ? 'fa-rotate-left' : 'fa-check'}"></i>
+                        </button>
+                        <button onclick="deleteReminderItem('${rem.id}')" title="মুছে ফেলুন" class="p-1.5 text-xs text-rose-400 hover:text-rose-300">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+            updateReminderCountBadge();
+        }
+
+        function toggleReminderStatus(id) {
+            const r = ARGON.reminders.find(rem => rem.id === id);
+            if (r) {
+                r.completed = !r.completed;
+                saveAllStorage();
+                renderRemindersTable();
+            }
+        }
+
+        function deleteReminderItem(id) {
+            ARGON.reminders = ARGON.reminders.filter(rem => rem.id !== id);
+            saveAllStorage();
+            renderRemindersTable();
+            showToast("রিমাইন্ডার মুছে ফেলা হয়েছে");
+        }
+
+        function format12HourTime(time24) {
+            if (!time24) return "";
+            const parts = time24.split(':');
+            let h = parseInt(parts[0], 10);
+            const m = parts[1];
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12;
+            h = h ? h : 12;
+            return `${h}:${m} ${ampm}`;
+        }
+
+        function requestBrowserNotificationPermission() {
+            if (!('Notification' in window)) {
+                showToast("ব্রাউজারে নোটিফিকেশন সাপোর্ট নেই");
+                return;
+            }
+            Notification.requestPermission().then(res => {
+                const label = document.getElementById('notificationPermLabel');
+                if (label) label.innerText = `অনুমতি: ${res}`;
+                if (res === 'granted') {
+                    showToast("নোটিফিকেশন সক্রিয় হয়েছে");
+                    new Notification("ARGON AI", { body: "ব্যাকগ্রাউন্ড অ্যালার্ম নোটিফিকেশন সক্রিয়!" });
+                }
+            });
+        }
+
+        /* -------------------------------------------------------------
+         * WHATSAPP HUB
+         * ------------------------------------------------------------- */
+        function openWhatsAppWeb() {
+            window.open('https://web.whatsapp.com', '_blank');
+        }
+
+        function generateAIWhatsAppDraft() {
+            const p = ARGON.personas[ARGON.currentPersona];
+            const box = document.getElementById('waMessageInput');
+            const sampleDrafts = [
+                `আসসালামু আলাইকুম। আপনার মেসেজ পেয়েছি, আমি বর্তমানে একটি কাজে ব্যস্ত আছি। কিছুক্ষণ পর বিস্তারিত জানাচ্ছি।`,
+                `নমস্কার। আপনার পাঠানো আপডেটটি আমি দেখেছি। আজকে বিকালে আমাদের কথা হবে।`,
+                `Hi! Thanks for reaching out. I will review and update you shortly.`
+            ];
+            const chosen = sampleDrafts[Math.floor(Math.random() * sampleDrafts.length)];
+            if (box) box.value = chosen;
+            showToast(`${p.name} ড্রাফট লিখে দিয়েছে`);
+        }
+
+        function sendApprovedWhatsApp() {
+            const phone = document.getElementById('waPhoneInput').value.replace(/[^0-9]/g, '');
+            const msg = document.getElementById('waMessageInput').value.trim();
+
+            if (!msg) {
+                showToast("অনুগ্রহ করে একটি মেসেজ লিখুন");
+                return;
+            }
+
+            let url = '';
+            if (phone) {
+                url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+            } else {
+                url = `https://web.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+            }
+            window.open(url, '_blank');
+            showToast("WhatsApp ওপেন করা হয়েছে");
+        }
+
+        function clearWhatsAppInputs() {
+            document.getElementById('waPhoneInput').value = '';
+            document.getElementById('waMessageInput').value = '';
+            showToast("মুছে ফেলা হয়েছে");
+        }
+
+        /* -------------------------------------------------------------
+         * LONG-TERM MEMORY & SETTINGS
+         * ------------------------------------------------------------- */
+        function handleMemoryFormSubmit(e) {
+            e.preventDefault();
+            const key = document.getElementById('memKeyInput').value.trim();
+            const val = document.getElementById('memValInput').value.trim();
+            if (!key || !val) return;
+
+            ARGON.memories.push({ id: 'mem_' + Date.now(), key, value: val });
+            saveAllStorage();
+            renderMemoryTable();
+            e.target.reset();
+            showToast("নতুন তথ্য মেমরিতে যুক্ত হয়েছে");
+        }
+
+        function renderMemoryTable() {
+            const container = document.getElementById('memoryItemsList');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (ARGON.memories.length === 0) {
+                container.innerHTML = `<p class="text-slate-500 text-xs">মেমরি ব্যাংকে কোনো তথ্য নেই।</p>`;
+                return;
+            }
+
+            ARGON.memories.forEach(mem => {
+                const item = document.createElement('div');
+                item.className = "p-2.5 rounded-xl glass-card flex items-start justify-between border border-white/5";
+                item.innerHTML = `
+                    <div>
+                        <span class="text-[10px] font-mono text-purple-300 bg-purple-950/60 px-2 py-0.5 rounded border border-purple-500/20">${mem.key}</span>
+                        <p class="text-xs text-slate-200 mt-1">${mem.value}</p>
+                    </div>
+                    <button onclick="deleteMemoryRecord('${mem.id}')" class="text-slate-500 hover:text-rose-400 text-xs p-1">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function deleteMemoryRecord(id) {
+            ARGON.memories = ARGON.memories.filter(m => m.id !== id);
+            saveAllStorage();
+            renderMemoryTable();
+            showToast("মেমরি রেকর্ড মুছে ফেলা হয়েছে");
+        }
+
+        function clearAllMemoryRecords() {
+            ARGON.memories = [];
+            saveAllStorage();
+            renderMemoryTable();
+            showToast("সব মেমরি মুছে ফেলা হয়েছে");
+        }
+
+        function saveGlobalAppSettings() {
+            const keyVal = document.getElementById('geminiApiKeyInput')?.value.trim();
+            ARGON.apiKey = keyVal || '';
+
+            const hP = document.getElementById('customHonorificPuja')?.value.trim();
+            const hN = document.getElementById('customHonorificNabila')?.value.trim();
+            const hS = document.getElementById('customHonorificSam')?.value.trim();
+
+            if (hP) ARGON.personas.puja.honorific = hP;
+            if (hN) ARGON.personas.nabila.honorific = hN;
+            if (hS) ARGON.personas.sam.honorific = hS;
+
+            saveAllStorage();
+            switchPersona(ARGON.currentPersona, false);
+            showToast("সেটিংস সফলভাবে সংরক্ষিত হয়েছে");
+        }
+
+        /* -------------------------------------------------------------
+         * TAB NAVIGATION & UI UTILITIES
+         * ------------------------------------------------------------- */
+        function openTab(tabId) {
+            const tabs = ['orb', 'chat', 'studio', 'reminders', 'whatsapp', 'settings'];
+            tabs.forEach(t => {
+                const el = document.getElementById(`tabContent-${t}`);
+                const btn = document.getElementById(`tabBtn-${t}`);
+                if (t === tabId) {
+                    if (el) el.classList.remove('hidden');
+                    if (btn) btn.className = "px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 text-white flex items-center gap-2 shadow-lg shadow-cyan-600/20";
+                } else {
+                    if (el) el.classList.add('hidden');
+                    if (btn) btn.className = "px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-900/60 flex items-center gap-2 transition";
+                }
+            });
+
+            if (tabId === 'studio') {
+                syncStudioControlsUI();
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('appToast');
+            const msgEl = document.getElementById('toastMessageEl');
+            if (toast && msgEl) {
+                msgEl.innerText = message;
+                toast.classList.remove('translate-y-24', 'opacity-0');
+                toast.classList.add('translate-y-0', 'opacity-100');
+                setTimeout(() => {
+                    toast.classList.add('translate-y-24', 'opacity-0');
+                    toast.classList.remove('translate-y-0', 'opacity-100');
+                }, 2800);
+            }
+        }
+    </script>
+</body>
+</html>
